@@ -27,6 +27,16 @@ export const translations: Record<Lang, Record<string, string>> = {
     // Projects
     projectsLabel: "Proyectos",
     projectsTitle: "Trabajo seleccionado",
+    project1Name: "Tiempo Masa Madre",
+    project1Desc: "E-commerce de panadería artesanal con sistema de preventa semanal, time-gating, carrito inteligente y pagos con Stripe y Mercado Pago.",
+    project2Name: "AlquiLibres",
+    project2Desc: "Plataforma hiper-local de alquileres temporarios sin comisiones. Modelo de suscripción fija para propietarios, filtros locales y sistema de confianza.",
+    project3Name: "Dividamos la Cuenta",
+    project3Desc: "Aplicación móvil para dividir gastos entre amigos de forma rápida y sencilla.",
+    project4Name: "Bendito Cross",
+    project4Desc: "Sitio web de gimnasio funcional con herramientas de entrenamiento: calculadora de RM, cronómetro, biblioteca de ejercicios y diccionario CrossFit.",
+    project5Name: "Escrutinio Carnaval 2026",
+    project5Desc: "Sistema de escrutinio electoral para el Carnaval 2026 de Paso de los Libres.",
 
     // Skills
     skillsLabel: "Stack",
@@ -76,6 +86,16 @@ export const translations: Record<Lang, Record<string, string>> = {
     // Projects
     projectsLabel: "Projects",
     projectsTitle: "Selected work",
+    project1Name: "Tiempo Masa Madre",
+    project1Desc: "Artisan bakery e-commerce with weekly pre-sale system, time-gating, smart cart and Stripe & Mercado Pago payments.",
+    project2Name: "AlquiLibres",
+    project2Desc: "Hyper-local temporary rental platform with no commissions. Fixed subscription model for owners, local filters and trust system.",
+    project3Name: "Split the Bill",
+    project3Desc: "Mobile app to split expenses with friends quickly and easily.",
+    project4Name: "Bendito Cross",
+    project4Desc: "Functional gym website with training tools: RM calculator, stopwatch, exercise library and CrossFit dictionary.",
+    project5Name: "Escrutinio Carnaval 2026",
+    project5Desc: "Electoral scrutiny system for the 2026 Carnaval in Paso de los Libres.",
 
     // Skills
     skillsLabel: "Stack",
@@ -125,6 +145,16 @@ export const translations: Record<Lang, Record<string, string>> = {
     // Projects
     projectsLabel: "Projetos",
     projectsTitle: "Trabalho selecionado",
+    project1Name: "Tiempo Masa Madre",
+    project1Desc: "E-commerce de padaria artesanal com sistema de pré-venda semanal, time-gating, carrinho inteligente e pagamentos com Stripe e Mercado Pago.",
+    project2Name: "AlquiLibres",
+    project2Desc: "Plataforma hiper-local de aluguéis temporários sem comissões. Modelo de assinatura fixa para proprietários, filtros locais e sistema de confiança.",
+    project3Name: "Dividamos a Conta",
+    project3Desc: "Aplicativo móvel para dividir despesas com amigos de forma rápida e simples.",
+    project4Name: "Bendito Cross",
+    project4Desc: "Site de academia funcional com ferramentas de treino: calculadora de RM, cronômetro, biblioteca de exercícios e dicionário CrossFit.",
+    project5Name: "Escrutinio Carnaval 2026",
+    project5Desc: "Sistema de escrutínio eleitoral para o Carnaval 2026 de Paso de los Libres.",
 
     // Skills
     skillsLabel: "Stack",

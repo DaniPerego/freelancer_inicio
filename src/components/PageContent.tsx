@@ -5,12 +5,13 @@ import { useLanguage } from "./LanguageProvider";
 import { AboutModal } from "./AboutModal";
 import { LogoScroll } from "./LogoScroll";
 
-interface Project {
-  name: string;
-  description: string;
-  url: string;
-  tags: string[];
-}
+const projectKeys = [
+  { name: "project1Name", desc: "project1Desc", url: "https://tiempomasamadre.vercel.app/", tags: ["Next.js", "TypeScript", "Prisma", "Tailwind", "Stripe"] },
+  { name: "project2Name", desc: "project2Desc", url: "https://alqui-libres.vercel.app/", tags: ["Vue.js", "Firebase", "Vite", "Tailwind"] },
+  { name: "project3Name", desc: "project3Desc", url: "https://dividamos-la-cuenta.vercel.app/", tags: ["React Native", "Expo", "TypeScript"] },
+  { name: "project4Name", desc: "project4Desc", url: "https://bendito-cross.vercel.app/", tags: ["HTML", "CSS", "JavaScript"] },
+  { name: "project5Name", desc: "project5Desc", url: "https://escrutinio-carnaval-2026.vercel.app/", tags: ["JavaScript", "Node.js"] },
+];
 
 const serviceKeys = [
   { title: "service1Title", description: "service1Description" },
@@ -18,7 +19,7 @@ const serviceKeys = [
   { title: "service3Title", description: "service3Description" },
 ];
 
-export function PageContent({ projects }: { projects: Project[] }) {
+export function PageContent() {
   const { t } = useLanguage();
   const [aboutOpen, setAboutOpen] = useState(false);
   const handleClose = useCallback(() => setAboutOpen(false), []);
@@ -96,7 +97,7 @@ export function PageContent({ projects }: { projects: Project[] }) {
             {t("projectsTitle")}
           </h2>
           <div className="space-y-6">
-            {projects.map((project) => (
+            {projectKeys.map((project) => (
               <a
                 key={project.name}
                 href={project.url}
@@ -107,10 +108,10 @@ export function PageContent({ projects }: { projects: Project[] }) {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h3 className="text-lg font-semibold mb-2 group-hover:text-accent transition-colors">
-                      {project.name}
+                      {t(project.name)}
                     </h3>
                     <p className="text-muted text-sm leading-relaxed mb-3">
-                      {project.description}
+                      {t(project.desc)}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {project.tags.map((tag) => (
