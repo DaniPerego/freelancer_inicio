@@ -124,7 +124,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     location: "Paso de los Libres, Corrientes",
     subtitle: "Desenvolvedor Web",
     description:
-      "Construo soluções web que resolvem problemas reais. De\u202Fe-commerce a plataformas SaaS.",
+      "Construo soluções web que resolvem problemas reais.\nDe e-commerce a plataformas SaaS.",
     navProjects: "Projetos",
     navContact: "Contato",
     navAbout: "Sobre mim",

@@ -38,7 +38,7 @@ export function PageContent() {
           {t("subtitle")}
         </h2>
         <LogoScroll />
-        <p className="max-w-md text-muted leading-relaxed mb-8">
+        <p className="max-w-md text-muted leading-relaxed mb-8 whitespace-pre-line">
           {t("description")}
         </p>
         <div className="flex gap-6">
