@@ -134,7 +134,7 @@ export default function Home() {
           Paso de los Libres, Corrientes
         </p>
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4">
-          Carlos Daniel Perego
+          Carlos Daniel Pérego
         </h1>
         <h2 className="text-xl sm:text-2xl text-muted mb-8">
           Desarrollador Web
@@ -298,7 +298,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="py-8 px-6 border-t border-card-border">
         <p className="text-center text-muted text-sm">
-          &copy; {new Date().getFullYear()} Carlos Daniel Perego. Todos los
+          &copy; {new Date().getFullYear()} Carlos Daniel Pérego. Todos los
           derechos reservados.
         </p>
       </footer>

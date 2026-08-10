@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Carlos Daniel Perego | Desarrollador Web",
+  title: "Carlos Daniel Pérego | Desarrollador Web",
   description:
     "Desarrollador Web en Paso de los Libres, Corrientes. Diseño y desarrollo de aplicaciones web, e-commerce y soluciones digitales.",
 };
