@@ -13,8 +13,8 @@ export function LogoScroll() {
 
       const rect = hero.getBoundingClientRect();
       const heroHeight = hero.offsetHeight;
-      // Progress: 0 at top of hero, 1 when hero is fully scrolled out
-      const progress = Math.min(1, Math.max(0, -rect.top / (heroHeight * 0.6)));
+      // Slower: more of the hero needs to scroll before full progress
+      const progress = Math.min(1, Math.max(0, -rect.top / (heroHeight * 1.2)));
       setScrollProgress(progress);
     };
 
@@ -22,22 +22,22 @@ export function LogoScroll() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Interpolate values based on scroll
-  const scale = 1 + scrollProgress * 1.8; // grows from 1 to ~2.8
+  // Shrink instead of grow
+  const scale = 1 - scrollProgress * 0.6; // shrinks from 1 to 0.4
   const opacity = 1 - scrollProgress * 0.85; // fades from 1 to 0.15
-  const blur = scrollProgress * 12; // 0 to 12px blur
-  const fixedOpacity = scrollProgress > 0.1 ? Math.min(0.2, (scrollProgress - 0.1) * 0.25) : 0;
+  const blur = scrollProgress * 12;
+  const fixedOpacity = scrollProgress > 0.2 ? Math.min(0.2, (scrollProgress - 0.2) * 0.3) : 0;
 
   return (
     <>
-      {/* Hero logo - visible, transitions out on scroll */}
-      <div ref={heroRef} className="flex justify-center -mb-4 mt-2">
+      {/* Hero logo */}
+      <div ref={heroRef} className="flex justify-center py-5">
         <img
           src="/logo-transparent.png"
           alt="Logo"
           className="transition-none"
           style={{
-            width: "200px",
+            width: "180px",
             opacity,
             filter: `blur(${blur}px)`,
             transform: `scale(${scale})`,
@@ -45,7 +45,7 @@ export function LogoScroll() {
         />
       </div>
 
-      {/* Fixed watermark - fades in on scroll */}
+      {/* Fixed watermark */}
       <div
         className="fixed inset-0 pointer-events-none z-0"
         style={{
