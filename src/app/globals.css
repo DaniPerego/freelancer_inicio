@@ -1,13 +1,23 @@
 @import "tailwindcss";
 
 :root {
+  --background: #fafafa;
+  --foreground: #171717;
+  --accent: #e85d04;
+  --accent-hover: #d45203;
+  --muted: #737373;
+  --border: #e5e5e5;
+  --card: #ffffff;
+}
+
+.dark {
   --background: #0a0a0a;
   --foreground: #ededed;
-  --accent: #ff9300;
-  --accent-hover: #e68500;
-  --card: #141414;
-  --card-border: #262626;
+  --accent: #e85d04;
+  --accent-hover: #ff7b1a;
   --muted: #a1a1aa;
+  --border: #262626;
+  --card: #141414;
 }
 
 @theme inline {
@@ -15,11 +25,10 @@
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
-  --color-card: var(--card);
-  --color-card-border: var(--card-border);
   --color-muted: var(--muted);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --font-sans: var(--font-inter);
 }
 
 html {
@@ -29,10 +38,16 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 ::selection {
   background: var(--accent);
-  color: var(--background);
+  color: white;
+}
+
+a {
+  text-decoration-skip-ink: auto;
 }
