@@ -82,12 +82,12 @@ export default function Home() {
 
       {/* Logo watermark */}
       <div
-        className="fixed inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]"
+        className="fixed inset-0 pointer-events-none opacity-[0.08] dark:opacity-[0.12]"
         style={{
-          backgroundImage: "url(/logo-transparent.png)",
+          backgroundImage: "url(/logo-watermark.png)",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
-          backgroundSize: "280px",
+          backgroundSize: "320px",
         }}
       />
 
