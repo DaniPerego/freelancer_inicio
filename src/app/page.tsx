@@ -82,7 +82,7 @@ export default function Home() {
       <ThemeToggle />
 
       {/* Hero */}
-      <header className="relative flex flex-col items-center justify-center min-h-[70vh] px-6 text-center">
+      <header className="relative flex flex-col items-center justify-center min-h-[70vh] px-6 pt-16 sm:pt-0 text-center">
         <p className="text-accent font-mono text-xs tracking-[0.2em] uppercase mb-4">
           Paso de los Libres, Corrientes
         </p>

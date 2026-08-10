@@ -8,11 +8,10 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="fixed top-6 right-6 p-2 rounded-full bg-border/50 hover:bg-border transition-colors z-50"
+      className="fixed top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full bg-border/50 hover:bg-border transition-colors z-50"
       aria-label={`Cambiar a tema ${theme === "light" ? "oscuro" : "claro"}`}
     >
       {theme === "light" ? (
-        // Moon icon
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="18"
@@ -27,7 +26,6 @@ export function ThemeToggle() {
           <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
         </svg>
       ) : (
-        // Sun icon
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="18"
