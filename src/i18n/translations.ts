@@ -6,7 +6,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     location: "Paso de los Libres, Corrientes",
     subtitle: "Desarrollador Web",
     description:
-      "Construyo soluciones web que resuelven problemas reales. Desde e-commerce hasta plataformas SaaS.",
+      "Construyo soluciones web que resuelven problemas reales. Desde\u00A0e-commerce hasta plataformas SaaS.",
     navProjects: "Proyectos",
     navContact: "Contacto",
     navAbout: "Sobre mí",
@@ -65,7 +65,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     location: "Paso de los Libres, Corrientes",
     subtitle: "Web Developer",
     description:
-      "I build web solutions that solve real problems. From e-commerce to SaaS platforms.",
+      "I build web solutions that solve real problems. From\u00A0e-commerce to SaaS platforms.",
     navProjects: "Projects",
     navContact: "Contact",
     navAbout: "About me",
@@ -124,7 +124,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     location: "Paso de los Libres, Corrientes",
     subtitle: "Desenvolvedor Web",
     description:
-      "Construo soluções web que resolvem problemas reais. De e-commerce a plataformas SaaS.",
+      "Construo soluções web que resolvem problemas reais. De\u00A0e-commerce a plataformas SaaS.",
     navProjects: "Projetos",
     navContact: "Contato",
     navAbout: "Sobre mim",
