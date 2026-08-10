@@ -1,4 +1,5 @@
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LogoScroll } from "@/components/LogoScroll";
 
 const projects = [
   {
@@ -80,17 +81,6 @@ export default function Home() {
     <div className="relative flex flex-col min-h-screen">
       <ThemeToggle />
 
-      {/* Logo watermark */}
-      <div
-        className="fixed inset-0 pointer-events-none opacity-[0.15] dark:opacity-[0.2]"
-        style={{
-          backgroundImage: "url(/logo-watermark.png)",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          backgroundSize: "min(50vw, 500px)",
-        }}
-      />
-
       {/* Hero */}
       <header className="relative flex flex-col items-center justify-center min-h-[70vh] px-6 text-center">
         <p className="text-accent font-mono text-xs tracking-[0.2em] uppercase mb-4">
@@ -99,9 +89,10 @@ export default function Home() {
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-3">
           Carlos Daniel Pérego
         </h1>
-        <h2 className="text-lg sm:text-xl text-muted font-light mb-8">
+        <h2 className="text-lg sm:text-xl text-muted font-light mb-4">
           Desarrollador Web
         </h2>
+        <LogoScroll />
         <p className="max-w-md text-muted leading-relaxed mb-8">
           Construyo soluciones web que resuelven problemas reales. Desde
           e-commerce hasta plataformas SaaS.
