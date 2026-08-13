@@ -26,7 +26,7 @@ export const translations: Record<Lang, Record<string, string>> = {
 
     // Projects
     projectsLabel: "Proyectos",
-    projectsTitle: "Proyectos y trabajos desarrolloweb-pdl",
+    projectsTitle: "Trabajos desarrolloweb-pdl",
     project1Name: "Tiempo Masa Madre",
     project1Desc: "E-commerce de panadería artesanal con sistema de preventa semanal, time-gating, carrito inteligente y pagos con Stripe y Mercado Pago.",
     project2Name: "AlquiLibres",
@@ -87,7 +87,7 @@ export const translations: Record<Lang, Record<string, string>> = {
 
     // Projects
     projectsLabel: "Projects",
-    projectsTitle: "Projects and work desarrolloweb-pdl",
+    projectsTitle: "Work desarrolloweb-pdl",
     project1Name: "Tiempo Masa Madre",
     project1Desc: "Artisan bakery e-commerce with weekly pre-sale system, time-gating, smart cart and Stripe & Mercado Pago payments.",
     project2Name: "AlquiLibres",
@@ -148,7 +148,7 @@ export const translations: Record<Lang, Record<string, string>> = {
 
     // Projects
     projectsLabel: "Projetos",
-    projectsTitle: "Projetos e trabalhos desenvolvimentoweb-pdl",
+    projectsTitle: "Trabalhos desenvolvimentoweb-pdl",
     project1Name: "Tiempo Masa Madre",
     project1Desc: "E-commerce de padaria artesanal com sistema de pré-venda semanal, time-gating, carrinho inteligente e pagamentos com Stripe e Mercado Pago.",
     project2Name: "AlquiLibres",
