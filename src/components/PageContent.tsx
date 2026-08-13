@@ -11,6 +11,7 @@ const projectKeys = [
   { name: "project3Name", desc: "project3Desc", url: "https://dividamos-la-cuenta.vercel.app/", tags: ["React Native", "Expo", "TypeScript"] },
   { name: "project4Name", desc: "project4Desc", url: "https://bendito-cross.vercel.app/", tags: ["HTML", "CSS", "JavaScript"] },
   { name: "project5Name", desc: "project5Desc", url: "https://escrutinio-carnaval-2026.vercel.app/", tags: ["JavaScript", "Node.js"] },
+  { name: "project6Name", desc: "project6Desc", url: "https://gestion-gimnasio-demo.vercel.app/", tags: ["Next.js", "TypeScript", "Tailwind"] },
 ];
 
 const serviceKeys = [

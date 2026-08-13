@@ -37,6 +37,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     project4Desc: "Sitio web de gimnasio funcional con herramientas de entrenamiento: calculadora de RM, cronómetro, biblioteca de ejercicios y diccionario CrossFit.",
     project5Name: "Escrutinio Carnaval 2026",
     project5Desc: "Sistema de escrutinio electoral para el Carnaval 2026 de Paso de los Libres.",
+    project6Name: "Gestión Gimnasio",
+    project6Desc: "Sistema integral de administración de gimnasios con control de socios, registro de asistencias, gestión de pagos y reportes financieros.",
 
     // Skills
     skillsLabel: "Stack",
@@ -96,6 +98,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     project4Desc: "Functional gym website with training tools: RM calculator, stopwatch, exercise library and CrossFit dictionary.",
     project5Name: "Escrutinio Carnaval 2026",
     project5Desc: "Electoral scrutiny system for the 2026 Carnaval in Paso de los Libres.",
+    project6Name: "Gym Management",
+    project6Desc: "Complete gym management system with member control, attendance tracking, payment management and financial reports.",
 
     // Skills
     skillsLabel: "Stack",
@@ -155,6 +159,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     project4Desc: "Site de academia funcional com ferramentas de treino: calculadora de RM, cronômetro, biblioteca de exercícios e dicionário CrossFit.",
     project5Name: "Escrutinio Carnaval 2026",
     project5Desc: "Sistema de escrutínio eleitoral para o Carnaval 2026 de Paso de los Libres.",
+    project6Name: "Gestão Academia",
+    project6Desc: "Sistema completo de administração de academias com controle de sócios, registro de presenças, gestão de pagamentos e relatórios financeiros.",
 
     // Skills
     skillsLabel: "Stack",
