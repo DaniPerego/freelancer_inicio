@@ -65,11 +65,13 @@ export function AboutModal({ open, onClose }: AboutModalProps) {
           </svg>
         </button>
 
-        {/* Photo placeholder */}
+        {/* Profile photo */}
         <div className="flex justify-center mb-6">
-          <div className="w-28 h-28 rounded-full bg-border/50 flex items-center justify-center text-3xl font-bold text-muted select-none">
-            CP
-          </div>
+          <img
+            src="/profile-avatar.jpg"
+            alt="Carlos Daniel Pérego"
+            className="w-28 h-28 rounded-full object-cover border-2 border-border"
+          />
         </div>
 
         {/* Name */}
