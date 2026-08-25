@@ -33,7 +33,7 @@ export function LogoScroll() {
       {/* Hero logo */}
       <div ref={heroRef} className="flex justify-center py-5">
         <img
-          src="/logo-transparent.png"
+          src="/favicon.svg"
           alt="Logo"
           className="transition-none"
           style={{
@@ -50,7 +50,7 @@ export function LogoScroll() {
         className="fixed inset-0 pointer-events-none z-0"
         style={{
           opacity: fixedOpacity,
-          backgroundImage: "url(/logo-watermark.png)",
+          backgroundImage: "url(/favicon.svg)",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
           backgroundSize: "min(50vw, 500px)",
