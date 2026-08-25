@@ -39,6 +39,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     project5Desc: "Sistema de escrutinio electoral para el Carnaval 2026 de Paso de los Libres.",
     project6Name: "Gestión Gimnasio",
     project6Desc: "Sistema integral de administración de gimnasios con control de socios, registro de asistencias, gestión de pagos y reportes financieros.",
+    project7Name: "QR Creator",
+    project7Desc: "Generador de códigos QR gratuito. Convierte texto o URLs en códigos QR descargables al instante.",
 
     // Skills
     skillsLabel: "Stack",
@@ -100,6 +102,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     project5Desc: "Electoral scrutiny system for the 2026 Carnaval in Paso de los Libres.",
     project6Name: "Gym Management",
     project6Desc: "Complete gym management system with member control, attendance tracking, payment management and financial reports.",
+    project7Name: "QR Creator",
+    project7Desc: "Free QR code generator. Convert text or URLs into downloadable QR codes instantly.",
 
     // Skills
     skillsLabel: "Stack",
@@ -161,6 +165,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     project5Desc: "Sistema de escrutínio eleitoral para o Carnaval 2026 de Paso de los Libres.",
     project6Name: "Gestão Academia",
     project6Desc: "Sistema completo de administração de academias com controle de sócios, registro de presenças, gestão de pagamentos e relatórios financeiros.",
+    project7Name: "QR Creator",
+    project7Desc: "Gerador de QR codes gratuito. Converta textos ou URLs em QR codes baixáveis instantaneamente.",
 
     // Skills
     skillsLabel: "Stack",
