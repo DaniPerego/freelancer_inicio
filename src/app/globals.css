@@ -52,30 +52,24 @@ a {
   text-decoration-skip-ink: auto;
 }
 
-/* ThemeToggle hover: giro horario + color accent */
-.theme-toggle-btn {
-  transition: color 0.3s ease-out, background-color 0.3s ease-out;
+/* Logo hover: giro 360° + color accent naranja */
+.logo-hover {
+  cursor: pointer;
 }
 
-.theme-toggle-btn:hover {
-  color: var(--accent);
-  background-color: var(--border);
+.logo-hover:hover {
+  animation: logo-spin 0.8s ease-out forwards;
+  filter: drop-shadow(0 0 8px var(--accent)) !important;
 }
 
-.theme-toggle-btn:hover svg {
-  animation: spin-color 0.6s ease-out forwards;
-}
-
-@keyframes spin-color {
+@keyframes logo-spin {
   0% {
-    transform: rotate(0deg);
-    stroke: currentColor;
+    transform: rotate(0deg) scale(1);
   }
   50% {
-    stroke: var(--accent);
+    filter: drop-shadow(0 0 16px var(--accent)) !important;
   }
   100% {
-    transform: rotate(360deg);
-    stroke: var(--accent);
+    transform: rotate(360deg) scale(1);
   }
 }

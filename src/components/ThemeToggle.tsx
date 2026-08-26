@@ -8,7 +8,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="fixed top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full bg-border/50 theme-toggle-btn z-50"
+      className="fixed top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full bg-border/50 hover:bg-border transition-colors z-50"
       aria-label={`Cambiar a tema ${theme === "light" ? "oscuro" : "claro"}`}
     >
       {theme === "light" ? (

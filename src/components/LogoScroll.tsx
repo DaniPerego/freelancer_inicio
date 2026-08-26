@@ -31,11 +31,11 @@ export function LogoScroll() {
   return (
     <>
       {/* Hero logo */}
-      <div ref={heroRef} className="flex justify-center py-5">
+      <div ref={heroRef} className="flex justify-center py-5 group/logo">
         <img
           src="/favicon.svg"
           alt="Logo"
-          className="transition-none"
+          className="transition-none logo-hover"
           style={{
             width: "180px",
             opacity,
