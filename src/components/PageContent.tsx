@@ -37,10 +37,10 @@ export function PageContent() {
           DesarrolloWeb-pdl
         </h1>
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight mb-2">
-          Carlos Daniel Pérego
+          by Carlos Daniel Pérego
         </h2>
         <h3 className="text-lg sm:text-xl text-muted font-light mb-4">
-          desarrollador Web
+          desarrollador web
         </h3>
         <LogoScroll />
         <p className="max-w-md text-muted leading-relaxed mb-8 whitespace-pre-line">
