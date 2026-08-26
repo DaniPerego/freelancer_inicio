@@ -40,7 +40,7 @@ export function PageContent() {
           Carlos Daniel Pérego
         </h2>
         <h3 className="text-lg sm:text-xl text-muted font-light mb-4">
-          Desarrollador Web
+          desarrollador Web
         </h3>
         <LogoScroll />
         <p className="max-w-md text-muted leading-relaxed mb-8 whitespace-pre-line">
