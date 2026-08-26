@@ -33,11 +33,11 @@ export function PageContent() {
         <p className="text-accent font-mono text-xs tracking-[0.2em] uppercase mb-4">
           {t("location")}
         </p>
-        <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-3 text-accent">
+        <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-3 text-accent">
           DesarrolloWeb-pdl
         </h1>
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight mb-2">
-          By Carlos Daniel Pérego
+          Carlos Daniel Pérego
         </h2>
         <h3 className="text-lg sm:text-xl text-muted font-light mb-4">
           Desarrollador Web
