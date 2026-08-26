@@ -51,25 +51,3 @@ body {
 a {
   text-decoration-skip-ink: auto;
 }
-
-/* Logo hover: giro 360° + color accent naranja */
-.logo-hover {
-  cursor: pointer;
-}
-
-.logo-hover:hover {
-  animation: logo-spin 0.8s ease-out forwards;
-  filter: drop-shadow(0 0 8px var(--accent)) !important;
-}
-
-@keyframes logo-spin {
-  0% {
-    transform: rotate(0deg) scale(1);
-  }
-  50% {
-    filter: drop-shadow(0 0 16px var(--accent)) !important;
-  }
-  100% {
-    transform: rotate(360deg) scale(1);
-  }
-}
