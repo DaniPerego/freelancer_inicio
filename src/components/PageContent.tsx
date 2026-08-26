@@ -299,7 +299,7 @@ export function PageContent() {
       <footer className="relative py-8 px-6 border-t border-border">
         <div className="flex flex-col items-center justify-center gap-3">
           <p className="text-center text-muted text-xs">
-            © 2026 DesarrolloWeb-pdl - Carlos Daniel Pérego
+            © 2026 Carlos Daniel Pérego
           </p>
           <p className="footer-brand flex items-center gap-2 text-xs text-muted transition-colors hover:text-accent">
             <span
