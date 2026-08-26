@@ -266,6 +266,31 @@ export function PageContent() {
               </svg>
               @desarrolloweb.pdl
             </a>
+
+            {/* Web */}
+            <a
+              href="https://www.desarrolloweb-pdl.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 hover:text-accent transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" x2="22" y1="12" y2="12" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg>
+              www.desarrolloweb-pdl.vercel.app
+            </a>
           </div>
         </div>
       </section>
@@ -273,7 +298,7 @@ export function PageContent() {
       {/* Footer */}
       <footer className="relative py-8 px-6 border-t border-border">
         <p className="text-center text-muted text-xs">
-          © {new Date().getFullYear()} Carlos Daniel Pérego
+          © 2026 DesarrolloWeb-pdl - by Carlos Daniel Pérego
         </p>
       </footer>
 
