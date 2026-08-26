@@ -37,7 +37,7 @@ export function PageContent() {
           DesarrolloWeb-pdl
         </h1>
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight mb-2">
-          by Carlos Daniel Pérego
+          Carlos Daniel Pérego
         </h2>
         <h3 className="text-lg sm:text-xl text-muted font-light mb-4">
           desarrollador web
@@ -298,7 +298,7 @@ export function PageContent() {
       {/* Footer */}
       <footer className="relative py-8 px-6 border-t border-border">
         <p className="text-center text-muted text-xs">
-          © 2026 DesarrolloWeb-pdl - by Carlos Daniel Pérego
+          © 2026 DesarrolloWeb-pdl - Carlos Daniel Pérego
         </p>
       </footer>
 
