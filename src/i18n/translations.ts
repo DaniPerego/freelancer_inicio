@@ -27,6 +27,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     // Methodology
     methodologyLabel: "Metodología",
     methodologyTitle: "Cómo trabajo",
+    methodologyGroup1: "Desarrollo con IA",
+    methodologyGroup2: "Proyecto de punta a punta",
     method1Title: "Planificación con IA",
     method1Description:
       "Defino arquitectura y desglose de tareas con agentes de planificación antes de escribir una línea.",
@@ -39,6 +41,21 @@ export const translations: Record<Lang, Record<string, string>> = {
     method4Title: "Verificación automatizada",
     method4Description:
       "Arneses de IA y tests continuos cierran el ciclo antes de entregar.",
+    process1Title: "Descubrimiento",
+    process1Description:
+      "Primera reunión sin compromiso. Entiendo tu problema, tu negocio y qué necesitás resolver.",
+    process2Title: "Propuesta y alcance",
+    process2Description:
+      "Documento claro con alcance, cronograma y presupuesto cerrado. Sin sorpresas ni costos ocultos.",
+    process3Title: "Desarrollo",
+    process3Description:
+      "Construyo con mi flujo asistido por IA. Comunicación periódica y avances visibles, no cajas negras.",
+    process4Title: "Despliegue",
+    process4Description:
+      "Lanzamiento a producción con monitoreo. Proyecto funcionando, documentado y listo para escalar.",
+    process5Title: "Soporte",
+    process5Description:
+      "Acompañamiento post-lanzamiento. Ajustes, mejoras y mantenimiento para que tu producto siga creciendo.",
 
     // Projects
     projectsLabel: "Proyectos",
@@ -111,6 +128,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     // Methodology
     methodologyLabel: "Methodology",
     methodologyTitle: "How I work",
+    methodologyGroup1: "AI-assisted development",
+    methodologyGroup2: "End-to-end project",
     method1Title: "AI Planning",
     method1Description:
       "I define architecture and task breakdown with planning agents before writing a single line.",
@@ -123,6 +142,21 @@ export const translations: Record<Lang, Record<string, string>> = {
     method4Title: "Automated verification",
     method4Description:
       "AI harnesses and continuous tests close the cycle before delivery.",
+    process1Title: "Discovery",
+    process1Description:
+      "First meeting with no commitment. I understand your problem, your business and what you need to solve.",
+    process2Title: "Proposal and scope",
+    process2Description:
+      "Clear document with scope, timeline and fixed budget. No surprises or hidden costs.",
+    process3Title: "Development",
+    process3Description:
+      "I build with my AI-assisted workflow. Periodic communication and visible progress, no black boxes.",
+    process4Title: "Deployment",
+    process4Description:
+      "Launch to production with monitoring. Working project, documented and ready to scale.",
+    process5Title: "Support",
+    process5Description:
+      "Post-launch support. Adjustments, improvements and maintenance so your product keeps growing.",
 
     // Projects
     projectsLabel: "Projects",
@@ -195,6 +229,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     // Methodology
     methodologyLabel: "Metodologia",
     methodologyTitle: "Como trabalho",
+    methodologyGroup1: "Desenvolvimento com IA",
+    methodologyGroup2: "Projeto de ponta a ponta",
     method1Title: "Planejamento com IA",
     method1Description:
       "Defino arquitetura e desglose de tarefas com agentes de planejamento antes de escrever uma linha.",
@@ -207,6 +243,21 @@ export const translations: Record<Lang, Record<string, string>> = {
     method4Title: "Verificação automatizada",
     method4Description:
       "Arneses de IA e testes contínuos fecham o ciclo antes da entrega.",
+    process1Title: "Descoberta",
+    process1Description:
+      "Primeira reunião sem compromisso. Entendo seu problema, seu negócio e o que você precisa resolver.",
+    process2Title: "Proposta e escopo",
+    process2Description:
+      "Documento claro com escopo, cronograma e orçamento fechado. Sem surpresas ou custos ocultos.",
+    process3Title: "Desenvolvimento",
+    process3Description:
+      "Construo com meu fluxo assistido por IA. Comunicação periódica e progresso visível, sem caixas-pretas.",
+    process4Title: "Implantação",
+    process4Description:
+      "Lançamento em produção com monitoramento. Projeto funcionando, documentado e pronto para escalar.",
+    process5Title: "Suporte",
+    process5Description:
+      "Suporte pós-lançamento. Ajustes, melhorias e manutenção para que seu produto continue crescendo.",
 
     // Projects
     projectsLabel: "Projetos",

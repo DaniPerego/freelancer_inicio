@@ -101,27 +101,98 @@ export function PageContent() {
           <h2 className="text-3xl sm:text-4xl font-bold mb-10">
             {t("methodologyTitle")}
           </h2>
-          <div className="space-y-8">
-            {[
-              { num: "01", title: "method1Title", desc: "method1Description" },
-              { num: "02", title: "method2Title", desc: "method2Description" },
-              { num: "03", title: "method3Title", desc: "method3Description" },
-              { num: "04", title: "method4Title", desc: "method4Description" },
-            ].map((step) => (
-              <div key={step.num} className="group flex gap-6">
-                <span className="font-mono text-accent text-sm shrink-0 mt-1">
-                  {step.num}
+
+          <div className="space-y-4">
+            {/* Grupo 1: Desarrollo con IA */}
+            <details className="group border-b border-border">
+              <summary className="flex items-center justify-between cursor-pointer list-none py-5 [&::-webkit-details-marker]:hidden">
+                <span className="text-lg font-semibold group-hover:text-accent transition-colors">
+                  {t("methodologyGroup1")}
                 </span>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2 group-hover:text-accent transition-colors">
-                    {t(step.title)}
-                  </h3>
-                  <p className="text-muted leading-relaxed">
-                    {t(step.desc)}
-                  </p>
-                </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-muted shrink-0 ml-4 transition-transform duration-200 group-open:rotate-90"
+                >
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </summary>
+              <div className="pb-6 space-y-6">
+                {[
+                  { num: "01", title: "method1Title", desc: "method1Description" },
+                  { num: "02", title: "method2Title", desc: "method2Description" },
+                  { num: "03", title: "method3Title", desc: "method3Description" },
+                  { num: "04", title: "method4Title", desc: "method4Description" },
+                ].map((step) => (
+                  <div key={step.num} className="group/step flex gap-6">
+                    <span className="font-mono text-accent text-sm shrink-0 mt-1">
+                      {step.num}
+                    </span>
+                    <div>
+                      <h3 className="font-semibold mb-1 group-hover/step:text-accent transition-colors">
+                        {t(step.title)}
+                      </h3>
+                      <p className="text-muted text-sm leading-relaxed">
+                        {t(step.desc)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </details>
+
+            {/* Grupo 2: Proyecto de punta a punta */}
+            <details className="group border-b border-border">
+              <summary className="flex items-center justify-between cursor-pointer list-none py-5 [&::-webkit-details-marker]:hidden">
+                <span className="text-lg font-semibold group-hover:text-accent transition-colors">
+                  {t("methodologyGroup2")}
+                </span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-muted shrink-0 ml-4 transition-transform duration-200 group-open:rotate-90"
+                >
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </summary>
+              <div className="pb-6 space-y-6">
+                {[
+                  { num: "01", title: "process1Title", desc: "process1Description" },
+                  { num: "02", title: "process2Title", desc: "process2Description" },
+                  { num: "03", title: "process3Title", desc: "process3Description" },
+                  { num: "04", title: "process4Title", desc: "process4Description" },
+                  { num: "05", title: "process5Title", desc: "process5Description" },
+                ].map((step) => (
+                  <div key={step.num} className="group/step flex gap-6">
+                    <span className="font-mono text-accent text-sm shrink-0 mt-1">
+                      {step.num}
+                    </span>
+                    <div>
+                      <h3 className="font-semibold mb-1 group-hover/step:text-accent transition-colors">
+                        {t(step.title)}
+                      </h3>
+                      <p className="text-muted text-sm leading-relaxed">
+                        {t(step.desc)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </details>
           </div>
         </div>
       </section>
