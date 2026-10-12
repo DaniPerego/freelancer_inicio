@@ -53,12 +53,17 @@ export const translations: Record<Lang, Record<string, string>> = {
 
     // About
     aboutTitle: "Sobre mí",
-    aboutRole: "Desarrollador Web",
+    aboutRole: "Desarrollador Front-End & Integración de IA",
     aboutEducation: "Formación",
-    aboutEdu1: "Desarrollador Web Full Stack",
-    aboutEdu2: "Tecnólogo en Informática",
+    aboutEdu1: "Técnico Superior en Desarrollo de Software (2018)",
+    aboutEdu2: "Formación continua en IA, ciberseguridad y analítica",
     aboutBio:
-      "Soy Carlos, desarrollador web full stack con sede en Paso de los Libres, Corrientes. Me especializo en crear soluciones web modernas, rápidas y funcionales que resuelven problemas reales. Desde e-commerce hasta plataformas SaaS, mi objetivo es construir productos digitales que generen impacto.",
+      "Soy Carlos, Técnico Superior en Desarrollo de Software con más de 10 años construyendo interfaces, sitios y sistemas web. Me especializo en Front-End e integración de Inteligencia Artificial en el flujo de trabajo real: ingeniería de prompts, pair programming en vivo con copilotos de código y orquestación de múltiples agentes autónomos. También administro redes informáticas y doy soporte técnico en el sector público.",
+    aboutExperience: "Experiencia",
+    aboutExp1: "+10 años construyendo productos web",
+    aboutExp2: "Desarrollo asistido por IA (agentes y prompts)",
+    aboutExp3: "Paso de los Libres, Argentina · Remoto",
+    aboutStack: "Stack principal",
 
     // Footer
     copyright: "© 2026 Carlos Daniel Pérego",
@@ -116,12 +121,17 @@ export const translations: Record<Lang, Record<string, string>> = {
 
     // About
     aboutTitle: "About me",
-    aboutRole: "Web Developer",
+    aboutRole: "Front-End Developer & AI Integration",
     aboutEducation: "Education",
-    aboutEdu1: "Full Stack Web Developer",
-    aboutEdu2: "IT Technologist",
+    aboutEdu1: "Higher Technician in Software Development (2018)",
+    aboutEdu2: "Continuous training in AI, cybersecurity and analytics",
     aboutBio:
-      "I'm Carlos, a full stack web developer based in Paso de los Libres, Corrientes. I specialize in creating modern, fast and functional web solutions that solve real problems. From e-commerce to SaaS platforms, my goal is to build digital products that make an impact.",
+      "I'm Carlos, a Higher Technician in Software Development with 10+ years building web interfaces, sites and systems. I specialize in Front-End and Artificial Intelligence integration in real workflows: prompt engineering, live pair programming with code copilots and orchestration of multiple autonomous agents. I also manage IT networks and provide technical support in the public sector.",
+    aboutExperience: "Experience",
+    aboutExp1: "10+ years building web products",
+    aboutExp2: "AI-assisted development (agents and prompts)",
+    aboutExp3: "Paso de los Libres, Argentina · Remote",
+    aboutStack: "Core stack",
 
     // Footer
     copyright: "© 2026 Carlos Daniel Pérego",
@@ -179,12 +189,17 @@ export const translations: Record<Lang, Record<string, string>> = {
 
     // About
     aboutTitle: "Sobre mim",
-    aboutRole: "Desenvolvedor Web",
+    aboutRole: "Desenvolvedor Front-End & Integração de IA",
     aboutEducation: "Formação",
-    aboutEdu1: "Desenvolvedor Web Full Stack",
-    aboutEdu2: "Tecnólogo em Informática",
+    aboutEdu1: "Técnico Superior em Desenvolvimento de Software (2018)",
+    aboutEdu2: "Formação contínua em IA, cibersegurança e análise de dados",
     aboutBio:
-      "Sou Carlos, desenvolvedor web full stack sediado em Paso de los Libres, Corrientes. Especializo-me em criar soluções web modernas, rápidas e funcionais que resolvem problemas reais. De e-commerce a plataformas SaaS, meu objetivo é construir produtos digitais que façam impacto.",
+      "Sou Carlos, Técnico Superior em Desenvolvimento de Software com mais de 10 anos construindo interfaces, sites e sistemas web. Especializo-me em Front-End e integração de Inteligência Artificial no fluxo de trabalho real: engenharia de prompts, pair programming ao vivo com copilotos de código e orquestação de múltiplos agentes autônomos. Também administro redes de informática e ofereço suporte técnico no setor público.",
+    aboutExperience: "Experiência",
+    aboutExp1: "+10 anos construindo produtos web",
+    aboutExp2: "Desenvolvimento assistido por IA (agentes e prompts)",
+    aboutExp3: "Paso de los Libres, Argentina · Remoto",
+    aboutStack: "Stack principal",
 
     // Footer
     copyright: "© 2026 Carlos Daniel Pérego",
