@@ -74,6 +74,12 @@ export const translations: Record<Lang, Record<string, string>> = {
     project6Desc: "Sistema integral de administración de gimnasios con control de socios, registro de asistencias, gestión de pagos y reportes financieros.",
     project7Name: "QR Creator",
     project7Desc: "Generador de códigos QR gratuito. Convierte texto o URLs en códigos QR descargables al instante.",
+    project8Name: "TVLIBRES",
+    project8Desc: "App PWA para ver canales de TV argentinos oficiales en una sola aplicación. Sin publicidad, sin redirects, instalable desde el navegador.",
+    project9Name: "Libres Cobros",
+    project9Desc: "Sistema integral de cobros para clubes e instituciones: socios, cuotas, pagos online con Stripe y Mercado Pago, comprobantes, recordatorios por WhatsApp y reportes financieros.",
+    project10Name: "Libres PDF",
+    project10Desc: "Editor de PDF online. Agregá texto, imágenes, formas y anotaciones; dividí, uní y rotá páginas sin instalar nada.",
 
     // Skills
     skillsLabel: "Stack",
@@ -175,6 +181,12 @@ export const translations: Record<Lang, Record<string, string>> = {
     project6Desc: "Complete gym management system with member control, attendance tracking, payment management and financial reports.",
     project7Name: "QR Creator",
     project7Desc: "Free QR code generator. Convert text or URLs into downloadable QR codes instantly.",
+    project8Name: "TVLIBRES",
+    project8Desc: "PWA app to watch official Argentine TV channels in a single application. No ads, no redirects, installable from the browser.",
+    project9Name: "Libres Cobros",
+    project9Desc: "Complete billing system for clubs and institutions: members, fees, online payments with Stripe and Mercado Pago, receipts, WhatsApp reminders and financial reports.",
+    project10Name: "Libres PDF",
+    project10Desc: "Online PDF editor. Add text, images, shapes and annotations; split, merge and rotate pages without installing anything.",
 
     // Skills
     skillsLabel: "Stack",
@@ -276,6 +288,12 @@ export const translations: Record<Lang, Record<string, string>> = {
     project6Desc: "Sistema completo de administração de academias com controle de sócios, registro de presenças, gestão de pagamentos e relatórios financeiros.",
     project7Name: "QR Creator",
     project7Desc: "Gerador de QR codes gratuito. Converta textos ou URLs em QR codes baixáveis instantaneamente.",
+    project8Name: "TVLIBRES",
+    project8Desc: "App PWA para assistir canais de TV argentinos oficiais em um único aplicativo. Sem anúncios, sem redirecionamentos, instalável pelo navegador.",
+    project9Name: "Libres Cobros",
+    project9Desc: "Sistema completo de cobranças para clubes e instituições: sócios, cotas, pagamentos online com Stripe e Mercado Pago, comprovantes, lembretes por WhatsApp e relatórios financeiros.",
+    project10Name: "Libres PDF",
+    project10Desc: "Editor de PDF online. Adicione texto, imagens, formas e anotações; divida, una e gire páginas sem instalar nada.",
 
     // Skills
     skillsLabel: "Stack",

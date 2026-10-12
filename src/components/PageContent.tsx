@@ -13,6 +13,9 @@ const projectKeys = [
   { name: "project5Name", desc: "project5Desc", url: "https://escrutinio-carnaval-2026.vercel.app/", tags: ["JavaScript", "Node.js"] },
   { name: "project6Name", desc: "project6Desc", url: "https://gestion-gimnasio-demo.vercel.app/", tags: ["Next.js", "TypeScript", "Tailwind"] },
   { name: "project7Name", desc: "project7Desc", url: "https://libresqr.vercel.app/", tags: ["Next.js", "TypeScript", "Tailwind", "qrcode.react"] },
+  { name: "project8Name", desc: "project8Desc", url: "https://tvlibres.vercel.app/", tags: ["PWA", "JavaScript", "Service Worker"] },
+  { name: "project9Name", desc: "project9Desc", url: "https://libres-cobros.vercel.app/", tags: ["Next.js", "Prisma", "PostgreSQL", "Stripe", "Mercado Pago"] },
+  { name: "project10Name", desc: "project10Desc", url: "https://libres-pdf.vercel.app/", tags: ["JavaScript", "pdf-lib", "Fabric.js"] },
 ];
 
 const serviceKeys = [
