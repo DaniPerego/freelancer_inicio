@@ -24,6 +24,22 @@ export const translations: Record<Lang, Record<string, string>> = {
     service3Description:
       "Tiendas online con carrito, pasarelas de pago y gestión de stock.",
 
+    // Methodology
+    methodologyLabel: "Metodología",
+    methodologyTitle: "Cómo trabajo",
+    method1Title: "Planificación con IA",
+    method1Description:
+      "Defino arquitectura y desglose de tareas con agentes de planificación antes de escribir una línea.",
+    method2Title: "Desarrollo asistido",
+    method2Description:
+      "Pair programming en vivo con copilotos de código; los agentes generan, yo dirijo y decido.",
+    method3Title: "Revisión adversarial",
+    method3Description:
+      "Agentes independientes revisan el código con lentes distintos: legibilidad, riesgo, resiliencia.",
+    method4Title: "Verificación automatizada",
+    method4Description:
+      "Arneses de IA y tests continuos cierran el ciclo antes de entregar.",
+
     // Projects
     projectsLabel: "Proyectos",
     projectsTitle: "Trabajos desarrolloweb-pdl",
@@ -92,6 +108,22 @@ export const translations: Record<Lang, Record<string, string>> = {
     service3Description:
       "Online stores with cart, payment gateways and stock management.",
 
+    // Methodology
+    methodologyLabel: "Methodology",
+    methodologyTitle: "How I work",
+    method1Title: "AI Planning",
+    method1Description:
+      "I define architecture and task breakdown with planning agents before writing a single line.",
+    method2Title: "AI-assisted development",
+    method2Description:
+      "Live pair programming with code copilots; agents generate, I lead and decide.",
+    method3Title: "Adversarial review",
+    method3Description:
+      "Independent agents review the code through different lenses: readability, risk, resilience.",
+    method4Title: "Automated verification",
+    method4Description:
+      "AI harnesses and continuous tests close the cycle before delivery.",
+
     // Projects
     projectsLabel: "Projects",
     projectsTitle: "Work desarrolloweb-pdl",
@@ -159,6 +191,22 @@ export const translations: Record<Lang, Record<string, string>> = {
     service3Title: "E-commerce",
     service3Description:
       "Lojas online com carrinho, gateways de pagamento e gestão de estoque.",
+
+    // Methodology
+    methodologyLabel: "Metodologia",
+    methodologyTitle: "Como trabalho",
+    method1Title: "Planejamento com IA",
+    method1Description:
+      "Defino arquitetura e desglose de tarefas com agentes de planejamento antes de escrever uma linha.",
+    method2Title: "Desenvolvimento assistido",
+    method2Description:
+      "Pair programming ao vivo com copilotos de código; os agentes geram, eu dirijo e decido.",
+    method3Title: "Revisão adversarial",
+    method3Description:
+      "Agentes independentes revisam o código com lentes distintas: legibilidade, risco, resiliência.",
+    method4Title: "Verificação automatizada",
+    method4Description:
+      "Arneses de IA e testes contínuos fecham o ciclo antes da entrega.",
 
     // Projects
     projectsLabel: "Projetos",

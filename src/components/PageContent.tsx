@@ -92,6 +92,40 @@ export function PageContent() {
         </div>
       </section>
 
+      {/* Metodología */}
+      <section id="metodologia" className="relative py-20 px-6 border-t border-border">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-accent font-mono text-xs tracking-[0.2em] uppercase mb-3">
+            {t("methodologyLabel")}
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-10">
+            {t("methodologyTitle")}
+          </h2>
+          <div className="space-y-8">
+            {[
+              { num: "01", title: "method1Title", desc: "method1Description" },
+              { num: "02", title: "method2Title", desc: "method2Description" },
+              { num: "03", title: "method3Title", desc: "method3Description" },
+              { num: "04", title: "method4Title", desc: "method4Description" },
+            ].map((step) => (
+              <div key={step.num} className="group flex gap-6">
+                <span className="font-mono text-accent text-sm shrink-0 mt-1">
+                  {step.num}
+                </span>
+                <div>
+                  <h3 className="text-xl font-semibold mb-2 group-hover:text-accent transition-colors">
+                    {t(step.title)}
+                  </h3>
+                  <p className="text-muted leading-relaxed">
+                    {t(step.desc)}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Proyectos */}
       <section id="proyectos" className="relative py-20 px-6 border-t border-border">
         <div className="max-w-4xl mx-auto">
