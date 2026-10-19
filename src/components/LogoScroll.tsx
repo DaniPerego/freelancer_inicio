@@ -50,9 +50,10 @@ export function LogoScroll() {
     const watermarkSvg = watermarkSvgRef.current;
     if (!hero || !logo || !watermarkSvg) return;
 
-    const heroRect = hero.getBoundingClientRect();
     const heroHeight = hero.offsetHeight;
-    const progress = Math.min(1, Math.max(0, -heroRect.top / (heroHeight * 1.2)));
+    // Journey starts at the VERY first pixel of scroll (no dead zone) and
+    // completes after ~1.2 logo-heights of scrolling.
+    const progress = clamp(window.scrollY / (heroHeight * 1.2), 0, 1);
 
     // Phase 1 — hero logo -> watermark: instant seamless handoff, NO crossfade.
     // Only ONE of the two is visible at any moment (same position, size and
@@ -137,19 +138,12 @@ export function LogoScroll() {
         watermarkOpacity = 0.2 * (1 - footerProgress);
 
         // Footer icon "receive": armed only when the scroll hits the ABSOLUTE
-        // document end. The final grow + color complete via CSS transition a
-        // few ms AFTER you arrive — the effect never finishes early.
+        // document end. CSS transition (always on) animates BOTH directions —
+        // grow + color on arrival, smooth return when scrolling back up.
         if (!reducedMotion) {
           const atEnd = maxScroll > 0 && window.scrollY >= maxScroll - 1;
-          if (atEnd) {
-            footerIcon.style.transition = "transform 450ms ease-out, color 450ms ease-out";
-            footerIcon.style.setProperty("--cube-pop", "1.45");
-            footerIcon.style.color = "var(--accent)";
-          } else {
-            footerIcon.style.transition = "";
-            footerIcon.style.setProperty("--cube-pop", "1");
-            footerIcon.style.color = "";
-          }
+          footerIcon.style.setProperty("--cube-pop", atEnd ? "1.45" : "1");
+          footerIcon.style.color = atEnd ? "var(--accent)" : "";
         }
       } else {
         footerIcon.style.setProperty("--cube-pop", "1");
