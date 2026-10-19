@@ -86,10 +86,20 @@ export function LogoScroll() {
     const footerIcon = document.getElementById("footer-cube-icon");
     if (footerIcon) {
       const contact = document.getElementById("contacto");
-      if (contact) {
-        const contactRect = contact.getBoundingClientRect();
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (contact && maxScroll > 0) {
         const vh = window.innerHeight;
-        footerProgress = clamp((vh - contactRect.top) / (vh * 0.75), 0, 1);
+        const contactRect = contact.getBoundingClientRect();
+        // Journey starts when #contacto's top enters the viewport and
+        // completes EXACTLY at the document end (bottom of the footer).
+        if (contactRect.top < vh) {
+          const scrollY = window.scrollY;
+          const scrollAtEnter = Math.max(0, scrollY + contactRect.top - vh);
+          const range = maxScroll - scrollAtEnter;
+          footerProgress = range > 0
+            ? clamp((scrollY - scrollAtEnter) / range, 0, 1)
+            : 1;
+        }
       }
 
       if (footerProgress > 0) {
