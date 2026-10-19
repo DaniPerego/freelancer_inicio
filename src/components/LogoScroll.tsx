@@ -52,15 +52,18 @@ export function LogoScroll() {
 
     const heroHeight = hero.offsetHeight;
     // Journey starts at the VERY first pixel of scroll (no dead zone) and
-    // completes after ~1.2 logo-heights of scrolling.
-    const progress = clamp(window.scrollY / (heroHeight * 1.2), 0, 1);
+    // lasts at least 60% of the viewport so one wheel notch can't skip it.
+    const journeyPx = Math.max(heroHeight * 1.2, window.innerHeight * 0.6);
+    const progress = clamp(window.scrollY / journeyPx, 0, 1);
 
     // Phase 1 — hero logo -> watermark: instant seamless handoff, NO crossfade.
-    // Only ONE of the two is visible at any moment (same position, size and
-    // cube opacities on the swap frame), so there's no double-render shimmer.
-    // The watermark then glides from the logo's live position to viewport
-    // center while fading 1 -> 0.2. Scroll up plays it in reverse.
+    // Start point FROZEN at the logo's scroll-zero position (document coords):
+    // a clean monotonic glide start -> viewport center. Using the live logo
+    // position instead creates a moving-target lerp that stalls mid-way
+    // (up with the page, stop, then down to center) — the janky movement.
     const logoRect = logo.getBoundingClientRect();
+    const startVx = logoRect.left + logoRect.width / 2 + window.scrollX;
+    const startVy = logoRect.top + logoRect.height / 2 + window.scrollY;
     const heroCx = logoRect.left + logoRect.width / 2;
     const heroCy = logoRect.top + logoRect.height / 2;
     const vpCx = window.innerWidth / 2;
@@ -88,11 +91,11 @@ export function LogoScroll() {
     } else {
       // Scrolling: the watermark IS the logo now — instant takeover on the
       // first frame (it spawns exactly over the real logo's position).
-      // Smoothstep easing for a subtle, organic glide.
+      // Smoothstep easing over the FROZEN start -> center path.
       logo.style.opacity = "0";
       const eased = progress * progress * (3 - 2 * progress);
-      wmVx = heroCx + (vpCx - heroCx) * eased;
-      wmVy = heroCy + (vpCy - heroCy) * eased;
+      wmVx = startVx + (vpCx - startVx) * eased;
+      wmVy = startVy + (vpCy - startVy) * eased;
       watermarkOpacity = 1 - eased * 0.85; // settles at 0.15 — subtler
       watermarkTransform = `translate(-50%, -50%) translate(${wmVx - vpCx}px, ${wmVy - vpCy}px)`;
     }
