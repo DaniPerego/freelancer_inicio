@@ -74,12 +74,13 @@ export function LogoScroll() {
 
     // Footer-targeted travel animation: progress driven by scroll-to-end so the
     // journey completes even when the footer icon never reaches mid-viewport.
+    // Runs over the last 35% of the page so the landing feels slow and deliberate.
     const footerIcon = document.getElementById("footer-cube-icon");
     if (footerIcon) {
       const footerRect = footerIcon.getBoundingClientRect();
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const scrollToEnd = maxScroll > 0 ? window.scrollY / maxScroll : 0;
-      const footerProgress = clamp((scrollToEnd - 0.82) / 0.18, 0, 1);
+      const footerProgress = clamp((scrollToEnd - 0.65) / 0.35, 0, 1);
 
       if (footerProgress > 0) {
         const centerX = window.innerWidth / 2;
@@ -97,14 +98,15 @@ export function LogoScroll() {
 
         watermarkOpacity = 0.2 * (1 - footerProgress);
 
-        // Footer icon "receive" pop: 1 -> 1.35 -> 1, peaking at progress 0.9
-        const popP = footerProgress <= 0.9
-          ? footerProgress / 0.9
-          : 1 - (footerProgress - 0.9) / 0.1;
-        const popScale = reducedMotion ? 1 : 1 + popP * 0.35;
-        footerIcon.style.setProperty("--cube-pop", String(popScale));
+        // Footer icon "receive": grows and turns accent as the watermark lands,
+        // and STAYS that way — the cubes arrived home.
+        if (!reducedMotion) {
+          footerIcon.style.setProperty("--cube-pop", String(1 + footerProgress * 0.4));
+          footerIcon.style.color = footerProgress > 0.15 ? "var(--accent)" : "";
+        }
       } else {
         footerIcon.style.setProperty("--cube-pop", "1");
+        footerIcon.style.color = "";
       }
     }
 

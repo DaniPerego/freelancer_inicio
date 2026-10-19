@@ -1,12 +1,35 @@
 "use client";
 
-interface Cube {
-  left: string;
-  top: string;
-  size: number;
+import { useEffect, useState } from "react";
+
+// Grid tile geometry — must match the background pattern SVG exactly
+const GRID = 24;
+const CUBE_PAD = 3;
+const CUBE_SIZE = 18;
+
+interface BlinkSeed {
+  fx: number;
+  fy: number;
   delay: string;
   duration: string;
 }
+
+// Viewport fractions — snapped to exact grid cells after mount so the
+// blinking cubes ARE grid cells of the background pattern, not floating dots.
+const blinkSeeds: BlinkSeed[] = [
+  { fx: 0.06, fy: 0.1, delay: "0s", duration: "6.2s" },
+  { fx: 0.18, fy: 0.32, delay: "1.4s", duration: "7.5s" },
+  { fx: 0.31, fy: 0.08, delay: "2.8s", duration: "5.3s" },
+  { fx: 0.44, fy: 0.48, delay: "0.7s", duration: "8.1s" },
+  { fx: 0.58, fy: 0.22, delay: "3.5s", duration: "6.7s" },
+  { fx: 0.7, fy: 0.38, delay: "1.1s", duration: "4.9s" },
+  { fx: 0.85, fy: 0.12, delay: "4.2s", duration: "7.8s" },
+  { fx: 0.12, fy: 0.62, delay: "2.2s", duration: "5.6s" },
+  { fx: 0.26, fy: 0.78, delay: "5s", duration: "8.4s" },
+  { fx: 0.5, fy: 0.7, delay: "0.3s", duration: "6s" },
+  { fx: 0.66, fy: 0.85, delay: "3.8s", duration: "7.2s" },
+  { fx: 0.9, fy: 0.55, delay: "1.9s", duration: "5.9s" },
+];
 
 function makePatternDataUri(fill: string, opacity: number) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><rect x="3" y="3" width="18" height="18" rx="4" fill="${fill}" opacity="${opacity}"/></svg>`;
@@ -16,31 +39,48 @@ function makePatternDataUri(fill: string, opacity: number) {
 const lightPattern = makePatternDataUri("#171717", 1);
 const darkPattern = makePatternDataUri("#ededed", 1);
 
-// Hardcoded positions — never Math.random() during render to avoid SSR hydration mismatch.
-const liveCubes: Cube[] = [
-  { left: "8%", top: "12%", size: 8, delay: "0s", duration: "6.2s" },
-  { left: "22%", top: "28%", size: 10, delay: "1.4s", duration: "7.5s" },
-  { left: "35%", top: "8%", size: 6, delay: "2.8s", duration: "5.3s" },
-  { left: "48%", top: "42%", size: 12, delay: "0.7s", duration: "8.1s" },
-  { left: "62%", top: "18%", size: 9, delay: "3.5s", duration: "6.7s" },
-  { left: "75%", top: "33%", size: 7, delay: "1.1s", duration: "4.9s" },
-  { left: "88%", top: "10%", size: 11, delay: "4.2s", duration: "7.8s" },
-  { left: "14%", top: "55%", size: 8, delay: "2.2s", duration: "5.6s" },
-  { left: "28%", top: "72%", size: 10, delay: "5.0s", duration: "8.4s" },
-  { left: "55%", top: "68%", size: 6, delay: "0.3s", duration: "6.0s" },
-  { left: "70%", top: "82%", size: 9, delay: "3.8s", duration: "7.2s" },
-  { left: "92%", top: "60%", size: 8, delay: "1.9s", duration: "5.9s" },
-];
+interface LiveCube {
+  left: number;
+  top: number;
+  delay: string;
+  duration: string;
+}
+
+function gridCubes(): LiveCube[] {
+  const cols = Math.max(1, Math.ceil(window.innerWidth / GRID));
+  const rows = Math.max(1, Math.ceil(window.innerHeight / GRID));
+  return blinkSeeds.map((s) => {
+    const col = Math.min(cols - 1, Math.round(s.fx * (cols - 1)));
+    const row = Math.min(rows - 1, Math.round(s.fy * (rows - 1)));
+    return {
+      left: col * GRID + CUBE_PAD,
+      top: row * GRID + CUBE_PAD,
+      delay: s.delay,
+      duration: s.duration,
+    };
+  });
+}
 
 export function AmbientBackground() {
+  // Empty on SSR + first client render — populated in useEffect to keep
+  // grid math client-only and avoid hydration mismatch.
+  const [cubes, setCubes] = useState<LiveCube[]>([]);
+
+  useEffect(() => {
+    const update = () => setCubes(gridCubes());
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
   return (
-    <div className="fixed inset-0 -z-20 pointer-events-none">
+    <div className="fixed inset-0 -z-20 pointer-events-none overflow-hidden">
       {/* Light-theme subtle cube grid */}
       <div
         className="absolute inset-0 block dark:hidden"
         style={{
           backgroundImage: lightPattern,
-          backgroundSize: "24px 24px",
+          backgroundSize: `${GRID}px ${GRID}px`,
           opacity: "var(--ambient-pattern-opacity)",
         }}
       />
@@ -49,7 +89,7 @@ export function AmbientBackground() {
         className="absolute inset-0 hidden dark:block"
         style={{
           backgroundImage: darkPattern,
-          backgroundSize: "24px 24px",
+          backgroundSize: `${GRID}px ${GRID}px`,
           opacity: "var(--ambient-pattern-opacity)",
         }}
       />
@@ -61,16 +101,16 @@ export function AmbientBackground() {
           opacity: "var(--ambient-glow-opacity)",
         }}
       />
-      {/* Live breathing accent cubes */}
-      {liveCubes.map((cube, i) => (
+      {/* Blinking cubes — snapped to the exact cells of the pattern above */}
+      {cubes.map((cube, i) => (
         <div
           key={i}
-          className="ambient-cube absolute rounded-sm"
+          className="ambient-cube absolute rounded"
           style={{
             left: cube.left,
             top: cube.top,
-            width: cube.size,
-            height: cube.size,
+            width: CUBE_SIZE,
+            height: CUBE_SIZE,
             background: "var(--accent)",
             animationDelay: cube.delay,
             animationDuration: cube.duration,

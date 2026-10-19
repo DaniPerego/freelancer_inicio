@@ -429,7 +429,7 @@ export function PageContent() {
           <p className="footer-brand flex items-center gap-2 text-xs text-muted transition-colors hover:text-accent">
             <span
               id="footer-cube-icon"
-              className="inline-flex w-4 h-4 shrink-0 transition-transform will-change-transform"
+              className="inline-flex w-4 h-4 shrink-0 transition-colors duration-500 will-change-transform"
               style={{ transform: "scale(var(--cube-pop, 1))" }}
               aria-hidden="true"
             >
