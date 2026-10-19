@@ -8,8 +8,8 @@
   --muted: #737373;
   --border: #e5e5e5;
   --card: #ffffff;
-  --ambient-pattern-opacity: 0.05;
-  --ambient-glow-opacity: 0.03;
+  --ambient-pattern-opacity: 0.025;
+  --ambient-glow-opacity: 0.025;
 }
 
 .dark {

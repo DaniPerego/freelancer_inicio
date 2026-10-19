@@ -11,11 +11,30 @@ const CUBES = [
 ];
 
 const MAX_DIST = 22; // distancia máx para atenuar
-const WATERMARK_SIZE = 180; // tamaño base del watermark en px
+const LOGO_SIZE = 180; // tamaño del logo en px
 const FOOTER_ICON_SIZE = 16; // tamaño final del icono del footer en px
 
 function clamp(n: number, min: number, max: number) {
   return Math.min(max, Math.max(min, n));
+}
+
+function smoothstep(t: number) {
+  return t * t * (3 - 2 * t);
+}
+
+// Document-space position via the offset* chain — immune to CSS transforms.
+// getBoundingClientRect would return the ALREADY-transformed box once the
+// logo travels, which would corrupt the natural-position math.
+function docPos(el: HTMLElement): { x: number; y: number } {
+  let x = 0;
+  let y = 0;
+  let node: HTMLElement | null = el;
+  while (node) {
+    x += node.offsetLeft;
+    y += node.offsetTop;
+    node = node.offsetParent as HTMLElement | null;
+  }
+  return { x, y };
 }
 
 function getOpacities(mx: number | null, my: number | null) {
@@ -36,8 +55,6 @@ function getReducedMotion() {
 export function LogoScroll() {
   const heroRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
-  const watermarkRef = useRef<HTMLDivElement>(null);
-  const watermarkSvgRef = useRef<SVGSVGElement>(null);
   const rafRef = useRef<number | null>(null);
   const reducedMotionRef = useRef(getReducedMotion());
   const [mouse, setMouse] = useState<{ x: number | null; y: number | null }>({ x: null, y: null });
@@ -47,76 +64,43 @@ export function LogoScroll() {
 
     const hero = heroRef.current;
     const logo = logoRef.current;
-    const watermarkSvg = watermarkSvgRef.current;
-    if (!hero || !logo || !watermarkSvg) return;
+    if (!hero || !logo) return;
 
-    const heroHeight = hero.offsetHeight;
+    const scrollY = window.scrollY;
     // Layout viewport (excludes classic scrollbar). innerWidth INCLUDES it,
-    // which offsets the center math on desktop — the watermark would spawn
-    // ~8px off the logo and drift sideways. clientWidth matches the fixed
-    // container's 50% anchor and the logo's centered layout exactly.
+    // which offsets the center math on desktop by ~8px.
     const vpW = document.documentElement.clientWidth;
     const vpH = document.documentElement.clientHeight;
-    // Journey starts at the VERY first pixel of scroll (no dead zone) and
-    // lasts at least 60% of the viewport so one wheel notch can't skip it.
-    const journeyPx = Math.max(heroHeight * 1.2, vpH * 0.6);
-    const progress = clamp(window.scrollY / journeyPx, 0, 1);
-
-    // Phase 1 — hero logo -> watermark: instant seamless handoff, NO crossfade.
-    // Start point FROZEN at the logo's scroll-zero position (document coords):
-    // a clean monotonic glide start -> viewport center. Using the live logo
-    // position instead creates a moving-target lerp that stalls mid-way
-    // (up with the page, stop, then down to center) — the janky movement.
-    const logoRect = logo.getBoundingClientRect();
-    const startVx = logoRect.left + logoRect.width / 2 + window.scrollX;
-    const startVy = logoRect.top + logoRect.height / 2 + window.scrollY;
-    const heroCx = logoRect.left + logoRect.width / 2;
-    const heroCy = logoRect.top + logoRect.height / 2;
     const vpCx = vpW / 2;
     const vpCy = vpH / 2;
 
+    // Frozen natural position (document coords, transform-immune). The whole
+    // journey is driven from HERE on the ONE logo element — no swap, no
+    // second copy, no jump at scroll start.
+    const natural = docPos(logo);
+    const startCx0 = natural.x + logo.offsetWidth / 2;
+    const startCy0 = natural.y + logo.offsetHeight / 2;
+
+    // Phase 1 — logo -> viewport center. Journey starts at the very first
+    // pixel of scroll and lasts at least 60% of the viewport.
+    const journeyPx = Math.max(hero.offsetHeight * 1.2, vpH * 0.6);
+    const progress = clamp(scrollY / journeyPx, 0, 1);
+    const eased = smoothstep(progress);
+
     const reducedMotion = reducedMotionRef.current;
 
-    let wmVx = vpCx;
-    let wmVy = vpCy;
-    let wmScale = 1;
-    let watermarkOpacity = 0;
-    let watermarkTransform = "translate(-50%, -50%)";
-
-    if (reducedMotion) {
-      // No travel: real logo stays put; watermark just fades in at center.
-      logo.style.opacity = "1";
-      logo.style.filter = "none";
-      logo.style.transform = "none";
-      watermarkOpacity = progress > 0.3 ? 0.2 : 0;
-    } else if (progress <= 0) {
-      // At rest: real logo only.
-      logo.style.opacity = "1";
-      logo.style.filter = "none";
-      logo.style.transform = "none";
-    } else {
-      // Scrolling: the watermark IS the logo now — instant takeover on the
-      // first frame (it spawns exactly over the real logo's position).
-      // Smoothstep easing over the FROZEN start -> center path.
-      logo.style.opacity = "0";
-      const eased = progress * progress * (3 - 2 * progress);
-      wmVx = startVx + (vpCx - startVx) * eased;
-      wmVy = startVy + (vpCy - startVy) * eased;
-      watermarkOpacity = 1 - eased * 0.85; // settles at 0.15 — subtler
-      watermarkTransform = `translate(-50%, -50%) translate(${wmVx - vpCx}px, ${wmVy - vpCy}px)`;
-    }
-
+    // Phase 3 — footer travel, keyed to #contacto entering the viewport and
+    // completing EXACTLY at the document end. Pure function of position, so
+    // scrolling back up plays the exact reverse journey.
     let footerProgress = 0;
+    let maxScroll = 0;
     const footerIcon = document.getElementById("footer-cube-icon");
     if (footerIcon) {
       const contact = document.getElementById("contacto");
-      const maxScroll = document.documentElement.scrollHeight - vpH;
+      maxScroll = document.documentElement.scrollHeight - vpH;
       if (contact && maxScroll > 0) {
         const contactRect = contact.getBoundingClientRect();
-        // Journey starts when #contacto's top enters the viewport and
-        // completes EXACTLY at the document end (bottom of the footer).
         if (contactRect.top < vpH) {
-          const scrollY = window.scrollY;
           const scrollAtEnter = Math.max(0, scrollY + contactRect.top - vpH);
           const range = maxScroll - scrollAtEnter;
           footerProgress = range > 0
@@ -124,54 +108,58 @@ export function LogoScroll() {
             : 1;
         }
       }
-
-      if (footerProgress > 0) {
-        const footerRect = footerIcon.getBoundingClientRect();
-        const targetX = footerRect.left + footerRect.width / 2;
-        const targetY = footerRect.top + footerRect.height / 2;
-
-        if (!reducedMotion) {
-          const deltaX = (targetX - vpCx) * footerProgress;
-          const deltaY = (targetY - vpCy) * footerProgress;
-          const endScale = FOOTER_ICON_SIZE / WATERMARK_SIZE;
-          const scale = 1 - (1 - endScale) * footerProgress;
-          watermarkTransform = `translate(-50%, -50%) translate(${deltaX}px, ${deltaY}px) scale(${scale})`;
-          wmVx = vpCx + deltaX;
-          wmVy = vpCy + deltaY;
-          wmScale = scale;
-        }
-
-        watermarkOpacity = 0.2 * (1 - footerProgress);
-
-        // Footer icon "receive": armed only when the scroll hits the ABSOLUTE
-        // document end. CSS transition (always on) animates BOTH directions —
-        // grow + color on arrival, smooth return when scrolling back up.
-        if (!reducedMotion) {
-          const atEnd = maxScroll > 0 && window.scrollY >= maxScroll - 1;
-          footerIcon.style.setProperty("--cube-pop", atEnd ? "1.45" : "1");
-          footerIcon.style.color = atEnd ? "var(--accent)" : "";
-        }
-      } else {
-        footerIcon.style.setProperty("--cube-pop", "1");
-        footerIcon.style.color = "";
-      }
     }
 
-    watermarkSvg.style.transform = watermarkTransform;
-    watermarkSvg.style.opacity = String(watermarkOpacity);
+    // Compose the ONE traveler's transform.
+    // Phases 1+2: pinned glide from the frozen start to viewport center.
+    // Phase 3: center -> footer icon, shrinking to icon size, fading out.
+    let tx = (vpCx - startCx0) * eased;
+    let ty = scrollY + (vpCy - startCy0) * eased;
+    let scale = 1;
+    let opacity = 1 - eased * 0.85; // settles at 0.15
 
-    // Publish the visible cubes' viewport position + size so AmbientBackground
-    // can cut a soft hole in the blink layer exactly under them — blinks stay
-    // alive everywhere else. Hole follows the real logo at rest, the watermark
-    // during the journey. Negative hole = no hole.
-    const logoAtRest = reducedMotion || progress <= 0;
-    const holeR = logoAtRest
-      ? WATERMARK_SIZE / 2 + 12
-      : watermarkOpacity > 0.01
-        ? (WATERMARK_SIZE * wmScale) / 2 + 12
-        : -32;
-    document.documentElement.style.setProperty("--wm-vx", `${logoAtRest ? heroCx : wmVx}px`);
-    document.documentElement.style.setProperty("--wm-vy", `${logoAtRest ? heroCy : wmVy}px`);
+    if (footerProgress > 0 && !reducedMotion && footerIcon) {
+      const footerRect = footerIcon.getBoundingClientRect();
+      const targetX = footerRect.left + footerRect.width / 2;
+      const targetY = footerRect.top + footerRect.height / 2;
+      tx = (vpCx + (targetX - vpCx) * footerProgress) - startCx0;
+      ty = scrollY + (vpCy + (targetY - vpCy) * footerProgress) - startCy0;
+      scale = 1 - (1 - FOOTER_ICON_SIZE / LOGO_SIZE) * footerProgress;
+      opacity = (1 - eased * 0.85) * (1 - footerProgress);
+    }
+
+    if (reducedMotion) {
+      logo.style.opacity = "1";
+      logo.style.transform = "none";
+      logo.style.pointerEvents = "";
+    } else if (progress <= 0 && footerProgress <= 0) {
+      // At rest: plain in-flow logo, hover works.
+      logo.style.opacity = "1";
+      logo.style.transform = "none";
+      logo.style.pointerEvents = "";
+    } else {
+      logo.style.opacity = String(opacity);
+      logo.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+      logo.style.pointerEvents = "none";
+    }
+
+    // Footer icon "receive": armed only when the scroll hits the ABSOLUTE
+    // document end. CSS transition (always on) animates BOTH directions —
+    // grow + color on arrival, smooth return when scrolling back up.
+    if (footerIcon && !reducedMotion) {
+      const atEnd = maxScroll > 0 && scrollY >= maxScroll - 1;
+      footerIcon.style.setProperty("--cube-pop", atEnd ? "1.45" : "1");
+      footerIcon.style.color = atEnd ? "var(--accent)" : "";
+    }
+
+    // Publish the traveler's viewport center + size so AmbientBackground can
+    // cut a soft hole in the blink layer exactly under it. Negative hole = none.
+    const showCubes = !reducedMotion && (progress > 0 || footerProgress > 0);
+    const viewCx = startCx0 + tx;
+    const viewCy = startCy0 - scrollY + ty;
+    const holeR = showCubes && opacity > 0.01 ? (LOGO_SIZE * scale) / 2 + 12 : -32;
+    document.documentElement.style.setProperty("--wm-vx", `${viewCx}px`);
+    document.documentElement.style.setProperty("--wm-vy", `${viewCy}px`);
     document.documentElement.style.setProperty("--wm-hole", `${holeR}px`);
   }, []);
 
@@ -182,7 +170,6 @@ export function LogoScroll() {
     };
 
     const handleResize = () => {
-      // invalidate any cached layout assumptions on resize
       if (rafRef.current === null) {
         rafRef.current = requestAnimationFrame(tick);
       }
@@ -234,42 +221,21 @@ export function LogoScroll() {
   const opacities = getOpacities(mouse.x, mouse.y);
 
   return (
-    <>
-      {/* Hero logo */}
-      <div ref={heroRef} className="flex justify-center py-5">
-        <div
-          ref={logoRef}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          style={{ width: 180 }}
-          className="cursor-pointer will-change-transform"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="180" height="180">
-            <rect x="4" y="4" width="11" height="11" rx="2" fill="#e85d04" opacity={opacities[0]} style={{ transition: "opacity 0.25s ease-out" }} />
-            <rect x="17" y="4" width="11" height="11" rx="2" fill="#e85d04" opacity={opacities[1]} style={{ transition: "opacity 0.25s ease-out" }} />
-            <rect x="4" y="17" width="11" height="11" rx="2" fill="#e85d04" opacity={opacities[2]} style={{ transition: "opacity 0.25s ease-out" }} />
-            <rect x="17" y="17" width="11" height="11" rx="2" fill="#e85d04" opacity={opacities[3]} style={{ transition: "opacity 0.25s ease-out" }} />
-          </svg>
-        </div>
-      </div>
-
-      {/* Fixed watermark - inline SVG so we can transform it precisely */}
-      <div ref={watermarkRef} className="fixed inset-0 pointer-events-none -z-10">
-        <svg
-          ref={watermarkSvgRef}
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 32 32"
-          width={WATERMARK_SIZE}
-          height={WATERMARK_SIZE}
-          className="absolute left-1/2 top-1/2 text-accent will-change-transform"
-          style={{ transform: "translate(-50%, -50%)", opacity: 0 }}
-        >
-          <rect x="4" y="4" width="11" height="11" rx="2" fill="currentColor" opacity={1} />
-          <rect x="17" y="4" width="11" height="11" rx="2" fill="currentColor" opacity={0.7} />
-          <rect x="4" y="17" width="11" height="11" rx="2" fill="currentColor" opacity={0.5} />
-          <rect x="17" y="17" width="11" height="11" rx="2" fill="currentColor" opacity={0.3} />
+    <div ref={heroRef} className="flex justify-center py-5">
+      <div
+        ref={logoRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{ width: LOGO_SIZE }}
+        className="cursor-pointer will-change-transform"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width={LOGO_SIZE} height={LOGO_SIZE}>
+          <rect x="4" y="4" width="11" height="11" rx="2" fill="#e85d04" opacity={opacities[0]} style={{ transition: "opacity 0.25s ease-out" }} />
+          <rect x="17" y="4" width="11" height="11" rx="2" fill="#e85d04" opacity={opacities[1]} style={{ transition: "opacity 0.25s ease-out" }} />
+          <rect x="4" y="17" width="11" height="11" rx="2" fill="#e85d04" opacity={opacities[2]} style={{ transition: "opacity 0.25s ease-out" }} />
+          <rect x="17" y="17" width="11" height="11" rx="2" fill="#e85d04" opacity={opacities[3]} style={{ transition: "opacity 0.25s ease-out" }} />
         </svg>
       </div>
-    </>
+    </div>
   );
 }
