@@ -102,11 +102,17 @@ export function AmbientBackground() {
         }}
       />
       {/* Blinking cubes — snapped to the exact cells of the pattern above.
-          Wrapped in a dimming layer driven by LogoScroll via --ambient-blink-opacity
-          so blinks never shine through the translucent watermark. */}
+          A radial mask follows the watermark (driven by LogoScroll via --wm-*
+          vars) and cuts a soft hole under it, so blinks never shine through
+          the translucent cubes — while staying alive everywhere else. */}
       <div
         className="absolute inset-0"
-        style={{ opacity: "var(--ambient-blink-opacity, 1)" }}
+        style={{
+          maskImage:
+            "radial-gradient(circle at var(--wm-vx, 50%) var(--wm-vy, 50%), transparent var(--wm-hole, 0px), black calc(var(--wm-hole, 0px) + 24px))",
+          WebkitMaskImage:
+            "radial-gradient(circle at var(--wm-vx, 50%) var(--wm-vy, 50%), transparent var(--wm-hole, 0px), black calc(var(--wm-hole, 0px) + 24px))",
+        }}
       >
         {cubes.map((cube, i) => (
           <div

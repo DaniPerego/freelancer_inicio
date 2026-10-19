@@ -77,6 +77,11 @@ export function LogoScroll() {
     // 75% of the viewport — the footer sits right below, so landing coincides
     // with the footer coming into sight. Pure function of position, so
     // scrolling back up plays the exact reverse journey.
+    // Watermark viewport position (for AmbientBackground's blink mask)
+    let wmVx = window.innerWidth / 2;
+    let wmVy = window.innerHeight / 2;
+    let wmScale = 1;
+
     let footerProgress = 0;
     const footerIcon = document.getElementById("footer-cube-icon");
     if (footerIcon) {
@@ -100,6 +105,9 @@ export function LogoScroll() {
           const endScale = FOOTER_ICON_SIZE / WATERMARK_SIZE;
           const scale = 1 - (1 - endScale) * footerProgress;
           watermarkTransform = `translate(-50%, -50%) translate(${deltaX}px, ${deltaY}px) scale(${scale})`;
+          wmVx = centerX + deltaX;
+          wmVy = centerY + deltaY;
+          wmScale = scale;
         }
 
         watermarkOpacity = 0.2 * (1 - footerProgress);
@@ -119,11 +127,14 @@ export function LogoScroll() {
     watermarkSvg.style.transform = watermarkTransform;
     watermarkSvg.style.opacity = String(watermarkOpacity);
 
-    // Suppress ambient background blinks while the watermark is on screen —
-    // a bright blink behind the translucent watermark looks dirty.
-    // blinkOpacity: 1 (no watermark) -> 0 (full watermark), back to 1 after landing.
-    const blinkOpacity = 1 - Math.min(1, watermarkOpacity / 0.2);
-    document.documentElement.style.setProperty("--ambient-blink-opacity", String(blinkOpacity));
+    // Publish watermark viewport position + size so AmbientBackground can cut
+    // a soft hole in the blink layer exactly under it — blinks stay alive
+    // everywhere else instead of fading out globally. Negative hole = no hole.
+    const wmVisible = watermarkOpacity > 0.01;
+    const holeR = wmVisible ? (WATERMARK_SIZE * wmScale) / 2 + 12 : -32;
+    document.documentElement.style.setProperty("--wm-vx", `${wmVx}px`);
+    document.documentElement.style.setProperty("--wm-vy", `${wmVy}px`);
+    document.documentElement.style.setProperty("--wm-hole", `${holeR}px`);
   }, []);
 
   useEffect(() => {
@@ -162,7 +173,9 @@ export function LogoScroll() {
         cancelAnimationFrame(rafRef.current);
         rafRef.current = null;
       }
-      document.documentElement.style.removeProperty("--ambient-blink-opacity");
+      document.documentElement.style.removeProperty("--wm-vx");
+      document.documentElement.style.removeProperty("--wm-vy");
+      document.documentElement.style.removeProperty("--wm-hole");
     };
   }, [tick]);
 
