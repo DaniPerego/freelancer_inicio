@@ -1,21 +1,23 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import Image from "next/image";
 import { useLanguage } from "./LanguageProvider";
 import { AboutModal } from "./AboutModal";
 import { LogoScroll } from "./LogoScroll";
+import { AmbientBackground } from "./AmbientBackground";
 
 const projectKeys = [
-  { name: "project1Name", desc: "project1Desc", url: "https://tiempomasamadre.vercel.app/", tags: ["Next.js", "TypeScript", "Prisma", "Tailwind", "Stripe"] },
-  { name: "project2Name", desc: "project2Desc", url: "https://alqui-libres.vercel.app/", tags: ["Vue.js", "Firebase", "Vite", "Tailwind"] },
-  { name: "project3Name", desc: "project3Desc", url: "https://dividamos-la-cuenta.vercel.app/", tags: ["React Native", "Expo", "TypeScript"] },
-  { name: "project4Name", desc: "project4Desc", url: "https://bendito-cross.vercel.app/", tags: ["HTML", "CSS", "JavaScript"] },
-  { name: "project5Name", desc: "project5Desc", url: "https://escrutinio-carnaval-2026.vercel.app/", tags: ["JavaScript", "Node.js"] },
-  { name: "project6Name", desc: "project6Desc", url: "https://gestion-gimnasio-demo.vercel.app/", tags: ["Next.js", "TypeScript", "Tailwind"] },
-  { name: "project7Name", desc: "project7Desc", url: "https://libresqr.vercel.app/", tags: ["Next.js", "TypeScript", "Tailwind", "qrcode.react"] },
-  { name: "project8Name", desc: "project8Desc", url: "https://tvlibres.vercel.app/", tags: ["PWA", "JavaScript", "Service Worker"] },
-  { name: "project9Name", desc: "project9Desc", url: "https://libres-cobros.vercel.app/", tags: ["Next.js", "Prisma", "PostgreSQL", "Stripe", "Mercado Pago"] },
-  { name: "project10Name", desc: "project10Desc", url: "https://libres-pdf.vercel.app/", tags: ["JavaScript", "pdf-lib", "Fabric.js"] },
+  { slug: "tiempomasamadre", name: "project1Name", desc: "project1Desc", url: "https://tiempomasamadre.vercel.app/", tags: ["Next.js", "TypeScript", "Prisma", "Tailwind", "Stripe"] },
+  { slug: "alqui-libres", name: "project2Name", desc: "project2Desc", url: "https://alqui-libres.vercel.app/", tags: ["Vue.js", "Firebase", "Vite", "Tailwind"] },
+  { slug: "dividamos-la-cuenta", name: "project3Name", desc: "project3Desc", url: "https://dividamos-la-cuenta.vercel.app/", tags: ["React Native", "Expo", "TypeScript"] },
+  { slug: "bendito-cross", name: "project4Name", desc: "project4Desc", url: "https://bendito-cross.vercel.app/", tags: ["HTML", "CSS", "JavaScript"] },
+  { slug: "escrutinio-carnaval-2026", name: "project5Name", desc: "project5Desc", url: "https://escrutinio-carnaval-2026.vercel.app/", tags: ["JavaScript", "Node.js"] },
+  { slug: "gestion-gimnasio-demo", name: "project6Name", desc: "project6Desc", url: "https://gestion-gimnasio-demo.vercel.app/", tags: ["Next.js", "TypeScript", "Tailwind"] },
+  { slug: "libresqr", name: "project7Name", desc: "project7Desc", url: "https://libresqr.vercel.app/", tags: ["Next.js", "TypeScript", "Tailwind", "qrcode.react"] },
+  { slug: "tvlibres", name: "project8Name", desc: "project8Desc", url: "https://tvlibres.vercel.app/", tags: ["PWA", "JavaScript", "Service Worker"] },
+  { slug: "libres-cobros", name: "project9Name", desc: "project9Desc", url: "https://libres-cobros.vercel.app/", tags: ["Next.js", "Prisma", "PostgreSQL", "Stripe", "Mercado Pago"] },
+  { slug: "libres-pdf", name: "project10Name", desc: "project10Desc", url: "https://libres-pdf.vercel.app/", tags: ["JavaScript", "pdf-lib", "Fabric.js"] },
 ];
 
 const serviceKeys = [
@@ -31,6 +33,8 @@ export function PageContent() {
 
   return (
     <>
+      <AmbientBackground />
+
       {/* Hero */}
       <header className="relative flex flex-col items-center justify-center min-h-[70vh] px-6 pt-16 sm:pt-0 text-center">
         <p className="text-accent font-mono text-xs tracking-[0.2em] uppercase mb-4">
@@ -209,46 +213,56 @@ export function PageContent() {
           <h2 className="text-3xl sm:text-4xl font-bold mb-10">
             {t("projectsTitle")}
           </h2>
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {projectKeys.map((project) => (
               <a
                 key={project.name}
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block py-5 border-b border-border last:border-0 hover:border-accent/30 transition-colors"
+                className="group block rounded-lg border border-border bg-card overflow-hidden hover:border-accent/30 transition-colors"
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2 group-hover:text-accent transition-colors">
+                <div className="overflow-hidden rounded-t-lg">
+                  <Image
+                    src={`/projects/${project.slug}.webp`}
+                    alt={t(project.name)}
+                    width={1280}
+                    height={800}
+                    loading="lazy"
+                    className="w-full h-auto transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-4">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <h3 className="text-lg font-semibold group-hover:text-accent transition-colors">
                       {t(project.name)}
                     </h3>
-                    <p className="text-muted text-sm leading-relaxed mb-3">
-                      {t(project.desc)}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.map((tag) => (
-                        <span key={tag} className="text-xs text-muted/70">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-muted group-hover:text-accent transition-colors shrink-0 mt-1"
+                    >
+                      <path d="M7 17L17 7" />
+                      <path d="M7 7h10v10" />
+                    </svg>
                   </div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-muted group-hover:text-accent transition-colors shrink-0 mt-1.5"
-                  >
-                    <path d="M7 17L17 7" />
-                    <path d="M7 7h10v10" />
-                  </svg>
+                  <p className="text-muted text-sm leading-relaxed mb-3">
+                    {t(project.desc)}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="text-xs text-muted/70">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </a>
             ))}
@@ -411,7 +425,9 @@ export function PageContent() {
           </p>
           <p className="footer-brand flex items-center gap-2 text-xs text-muted transition-colors hover:text-accent">
             <span
-              className="inline-flex w-4 h-4 shrink-0 transition-transform hover:scale-105"
+              id="footer-cube-icon"
+              className="inline-flex w-4 h-4 shrink-0 transition-transform will-change-transform"
+              style={{ transform: "scale(var(--cube-pop, 1))" }}
               aria-hidden="true"
             >
               <svg
