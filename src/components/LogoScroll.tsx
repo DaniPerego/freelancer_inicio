@@ -87,10 +87,12 @@ export function LogoScroll() {
     } else {
       // Scrolling: the watermark IS the logo now — instant takeover on the
       // first frame (it spawns exactly over the real logo's position).
+      // Smoothstep easing for a subtle, organic glide.
       logo.style.opacity = "0";
-      wmVx = heroCx + (vpCx - heroCx) * progress;
-      wmVy = heroCy + (vpCy - heroCy) * progress;
-      watermarkOpacity = 1 - progress * 0.8;
+      const eased = progress * progress * (3 - 2 * progress);
+      wmVx = heroCx + (vpCx - heroCx) * eased;
+      wmVy = heroCy + (vpCy - heroCy) * eased;
+      watermarkOpacity = 1 - eased * 0.85; // settles at 0.15 — subtler
       watermarkTransform = `translate(-50%, -50%) translate(${wmVx - vpCx}px, ${wmVy - vpCy}px)`;
     }
 
@@ -134,15 +136,20 @@ export function LogoScroll() {
 
         watermarkOpacity = 0.2 * (1 - footerProgress);
 
-        // Footer icon "receive": anchored to the ABSOLUTE document end —
-        // starts within the last quarter-viewport of scroll and completes
-        // exactly at maxScroll. You watch it transform as you hit the bottom.
+        // Footer icon "receive": armed only when the scroll hits the ABSOLUTE
+        // document end. The final grow + color complete via CSS transition a
+        // few ms AFTER you arrive — the effect never finishes early.
         if (!reducedMotion) {
-          const endReceive = maxScroll > 0
-            ? clamp(1 - (maxScroll - window.scrollY) / (window.innerHeight * 0.25), 0, 1)
-            : 0;
-          footerIcon.style.setProperty("--cube-pop", String(1 + endReceive * 0.45));
-          footerIcon.style.color = endReceive > 0 ? "var(--accent)" : "";
+          const atEnd = maxScroll > 0 && window.scrollY >= maxScroll - 1;
+          if (atEnd) {
+            footerIcon.style.transition = "transform 450ms ease-out, color 450ms ease-out";
+            footerIcon.style.setProperty("--cube-pop", "1.45");
+            footerIcon.style.color = "var(--accent)";
+          } else {
+            footerIcon.style.transition = "";
+            footerIcon.style.setProperty("--cube-pop", "1");
+            footerIcon.style.color = "";
+          }
         }
       } else {
         footerIcon.style.setProperty("--cube-pop", "1");
@@ -153,13 +160,18 @@ export function LogoScroll() {
     watermarkSvg.style.transform = watermarkTransform;
     watermarkSvg.style.opacity = String(watermarkOpacity);
 
-    // Publish watermark viewport position + size so AmbientBackground can cut
-    // a soft hole in the blink layer exactly under it — blinks stay alive
-    // everywhere else instead of fading out globally. Negative hole = no hole.
-    const wmVisible = watermarkOpacity > 0.01;
-    const holeR = wmVisible ? (WATERMARK_SIZE * wmScale) / 2 + 12 : -32;
-    document.documentElement.style.setProperty("--wm-vx", `${wmVx}px`);
-    document.documentElement.style.setProperty("--wm-vy", `${wmVy}px`);
+    // Publish the visible cubes' viewport position + size so AmbientBackground
+    // can cut a soft hole in the blink layer exactly under them — blinks stay
+    // alive everywhere else. Hole follows the real logo at rest, the watermark
+    // during the journey. Negative hole = no hole.
+    const logoAtRest = reducedMotion || progress <= 0;
+    const holeR = logoAtRest
+      ? WATERMARK_SIZE / 2 + 12
+      : watermarkOpacity > 0.01
+        ? (WATERMARK_SIZE * wmScale) / 2 + 12
+        : -32;
+    document.documentElement.style.setProperty("--wm-vx", `${logoAtRest ? heroCx : wmVx}px`);
+    document.documentElement.style.setProperty("--wm-vy", `${logoAtRest ? heroCy : wmVy}px`);
     document.documentElement.style.setProperty("--wm-hole", `${holeR}px`);
   }, []);
 
