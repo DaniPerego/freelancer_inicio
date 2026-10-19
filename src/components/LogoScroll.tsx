@@ -54,10 +54,11 @@ export function LogoScroll() {
     const heroHeight = hero.offsetHeight;
     const progress = Math.min(1, Math.max(0, -heroRect.top / (heroHeight * 1.2)));
 
-    // Phase 1 — hero logo -> watermark: ONE continuous journey. The fixed
-    // watermark starts exactly on the hero logo and glides to viewport center
-    // as the hero scrolls away; the real logo fades out fast so the watermark
-    // takes over visually. Scroll up plays it in reverse by construction.
+    // Phase 1 — hero logo -> watermark: instant seamless handoff, NO crossfade.
+    // Only ONE of the two is visible at any moment (same position, size and
+    // cube opacities on the swap frame), so there's no double-render shimmer.
+    // The watermark then glides from the logo's live position to viewport
+    // center while fading 1 -> 0.2. Scroll up plays it in reverse.
     const logoRect = logo.getBoundingClientRect();
     const heroCx = logoRect.left + logoRect.width / 2;
     const heroCy = logoRect.top + logoRect.height / 2;
@@ -66,18 +67,32 @@ export function LogoScroll() {
 
     const reducedMotion = reducedMotionRef.current;
 
-    // Real hero logo: gone by 35% of hero scroll — the watermark "is" it now
-    const heroFade = clamp(progress / 0.35, 0, 1);
-    logo.style.opacity = String(1 - heroFade);
-    logo.style.filter = `blur(${heroFade * 12}px)`;
-    logo.style.transform = `scale(${1 - progress * 0.6})`;
-
-    // Watermark glides hero-logo-position -> viewport center, opacity 1 -> 0.2
-    let wmVx = reducedMotion ? vpCx : heroCx + (vpCx - heroCx) * progress;
-    let wmVy = reducedMotion ? vpCy : heroCy + (vpCy - heroCy) * progress;
+    let wmVx = vpCx;
+    let wmVy = vpCy;
     let wmScale = 1;
-    let watermarkOpacity = progress >= 1 ? 0.2 : 1 - progress * 0.8;
-    let watermarkTransform = `translate(-50%, -50%) translate(${wmVx - vpCx}px, ${wmVy - vpCy}px)`;
+    let watermarkOpacity = 0;
+    let watermarkTransform = "translate(-50%, -50%)";
+
+    if (reducedMotion) {
+      // No travel: real logo stays put; watermark just fades in at center.
+      logo.style.opacity = "1";
+      logo.style.filter = "none";
+      logo.style.transform = "none";
+      watermarkOpacity = progress > 0.3 ? 0.2 : 0;
+    } else if (progress <= 0) {
+      // At rest: real logo only.
+      logo.style.opacity = "1";
+      logo.style.filter = "none";
+      logo.style.transform = "none";
+    } else {
+      // Scrolling: the watermark IS the logo now — instant takeover on the
+      // first frame (it spawns exactly over the real logo's position).
+      logo.style.opacity = "0";
+      wmVx = heroCx + (vpCx - heroCx) * progress;
+      wmVy = heroCy + (vpCy - heroCy) * progress;
+      watermarkOpacity = 1 - progress * 0.8;
+      watermarkTransform = `translate(-50%, -50%) translate(${wmVx - vpCx}px, ${wmVy - vpCy}px)`;
+    }
 
     let footerProgress = 0;
     const footerIcon = document.getElementById("footer-cube-icon");
@@ -119,13 +134,15 @@ export function LogoScroll() {
 
         watermarkOpacity = 0.2 * (1 - footerProgress);
 
-        // Footer icon "receive": only kicks in during the LAST 20% of the
-        // journey — by then the footer is fully on screen, so you actually
-        // SEE the cubes arrive and the icon light up + grow. Stays that way.
+        // Footer icon "receive": anchored to the ABSOLUTE document end —
+        // starts within the last quarter-viewport of scroll and completes
+        // exactly at maxScroll. You watch it transform as you hit the bottom.
         if (!reducedMotion) {
-          const receive = clamp((footerProgress - 0.8) / 0.2, 0, 1);
-          footerIcon.style.setProperty("--cube-pop", String(1 + receive * 0.45));
-          footerIcon.style.color = receive > 0 ? "var(--accent)" : "";
+          const endReceive = maxScroll > 0
+            ? clamp(1 - (maxScroll - window.scrollY) / (window.innerHeight * 0.25), 0, 1)
+            : 0;
+          footerIcon.style.setProperty("--cube-pop", String(1 + endReceive * 0.45));
+          footerIcon.style.color = endReceive > 0 ? "var(--accent)" : "";
         }
       } else {
         footerIcon.style.setProperty("--cube-pop", "1");
