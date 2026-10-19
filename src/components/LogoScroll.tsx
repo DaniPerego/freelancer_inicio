@@ -14,6 +14,10 @@ const MAX_DIST = 22; // distancia máx para atenuar
 const WATERMARK_SIZE = 180; // tamaño base del watermark en px
 const FOOTER_ICON_SIZE = 16; // tamaño final del icono del footer en px
 
+function clamp(n: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, n));
+}
+
 function getOpacities(mx: number | null, my: number | null) {
   if (mx === null || my === null) return [1, 0.7, 0.5, 0.3];
 
@@ -68,14 +72,14 @@ export function LogoScroll() {
       watermarkOpacity = Math.min(0.2, (progress - 0.2) * 0.3);
     }
 
-    // Footer-targeted travel animation
+    // Footer-targeted travel animation: progress driven by scroll-to-end so the
+    // journey completes even when the footer icon never reaches mid-viewport.
     const footerIcon = document.getElementById("footer-cube-icon");
     if (footerIcon) {
       const footerRect = footerIcon.getBoundingClientRect();
-      const viewportH = window.innerHeight;
-      const start = viewportH; // footer icon top touches bottom of viewport
-      const end = viewportH * 0.5; // footer icon top at mid viewport
-      const footerProgress = Math.min(1, Math.max(0, (start - footerRect.top) / (start - end)));
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollToEnd = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      const footerProgress = clamp((scrollToEnd - 0.82) / 0.18, 0, 1);
 
       if (footerProgress > 0) {
         const centerX = window.innerWidth / 2;
@@ -93,10 +97,10 @@ export function LogoScroll() {
 
         watermarkOpacity = 0.2 * (1 - footerProgress);
 
-        // Footer icon "receive" pop: 1 -> 1.35 -> 1
-        const popP = footerProgress <= 0.5
-          ? footerProgress / 0.5
-          : 1 - (footerProgress - 0.5) / 0.5;
+        // Footer icon "receive" pop: 1 -> 1.35 -> 1, peaking at progress 0.9
+        const popP = footerProgress <= 0.9
+          ? footerProgress / 0.9
+          : 1 - (footerProgress - 0.9) / 0.1;
         const popScale = reducedMotion ? 1 : 1 + popP * 0.35;
         footerIcon.style.setProperty("--cube-pop", String(popScale));
       } else {

@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import Image from "next/image";
 import { useLanguage } from "./LanguageProvider";
 import { AboutModal } from "./AboutModal";
+import { ProjectModal } from "./ProjectModal";
 import { LogoScroll } from "./LogoScroll";
 import { AmbientBackground } from "./AmbientBackground";
 
@@ -30,6 +31,8 @@ export function PageContent() {
   const { t } = useLanguage();
   const [aboutOpen, setAboutOpen] = useState(false);
   const handleClose = useCallback(() => setAboutOpen(false), []);
+  const [projectModal, setProjectModal] = useState<typeof projectKeys[number] | null>(null);
+  const handleProjectClose = useCallback(() => setProjectModal(null), []);
 
   return (
     <>
@@ -215,14 +218,12 @@ export function PageContent() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {projectKeys.map((project) => (
-              <a
+              <button
                 key={project.name}
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block rounded-lg border border-border bg-card overflow-hidden hover:border-accent/30 transition-colors"
+                onClick={() => setProjectModal(project)}
+                className="group block w-full text-left rounded-lg border border-border bg-card overflow-hidden hover:border-accent/30 transition-colors"
               >
-                <div className="overflow-hidden rounded-t-lg">
+                <div className="relative overflow-hidden rounded-t-lg">
                   <Image
                     src={`/projects/${project.slug}.webp`}
                     alt={t(project.name)}
@@ -231,6 +232,8 @@ export function PageContent() {
                     loading="lazy"
                     className="w-full h-auto transition-transform duration-300 group-hover:scale-105"
                   />
+                  {/* Frosted orange veil — cleared on hover */}
+                  <div className="absolute inset-0 bg-accent/20 backdrop-blur-[2px] opacity-100 group-hover:opacity-0 transition-opacity duration-300 pointer-events-none" />
                 </div>
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-3 mb-2">
@@ -264,7 +267,7 @@ export function PageContent() {
                     ))}
                   </div>
                 </div>
-              </a>
+              </button>
             ))}
           </div>
         </div>
@@ -448,6 +451,7 @@ export function PageContent() {
       </footer>
 
       <AboutModal open={aboutOpen} onClose={handleClose} />
+      <ProjectModal project={projectModal} onClose={handleProjectClose} />
     </>
   );
 }

@@ -104,6 +104,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     aboutExp3: "Paso de los Libres, Argentina · Remoto",
     aboutStack: "Stack principal",
 
+    // Project modal
+    projectModalDemo: "Ver proyecto",
+    modalCloseAria: "Cerrar",
+
     // Footer
     copyright: "© 2026 Carlos Daniel Pérego",
   },
@@ -211,6 +215,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     aboutExp3: "Paso de los Libres, Argentina · Remote",
     aboutStack: "Core stack",
 
+    // Project modal
+    projectModalDemo: "View project",
+    modalCloseAria: "Close",
+
     // Footer
     copyright: "© 2026 Carlos Daniel Pérego",
   },
@@ -317,6 +325,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     aboutExp2: "Desenvolvimento assistido por IA (agentes e prompts)",
     aboutExp3: "Paso de los Libres, Argentina · Remoto",
     aboutStack: "Stack principal",
+
+    // Project modal
+    projectModalDemo: "Ver projeto",
+    modalCloseAria: "Fechar",
 
     // Footer
     copyright: "© 2026 Carlos Daniel Pérego",
