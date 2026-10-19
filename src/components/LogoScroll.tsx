@@ -51,9 +51,15 @@ export function LogoScroll() {
     if (!hero || !logo || !watermarkSvg) return;
 
     const heroHeight = hero.offsetHeight;
+    // Layout viewport (excludes classic scrollbar). innerWidth INCLUDES it,
+    // which offsets the center math on desktop — the watermark would spawn
+    // ~8px off the logo and drift sideways. clientWidth matches the fixed
+    // container's 50% anchor and the logo's centered layout exactly.
+    const vpW = document.documentElement.clientWidth;
+    const vpH = document.documentElement.clientHeight;
     // Journey starts at the VERY first pixel of scroll (no dead zone) and
     // lasts at least 60% of the viewport so one wheel notch can't skip it.
-    const journeyPx = Math.max(heroHeight * 1.2, window.innerHeight * 0.6);
+    const journeyPx = Math.max(heroHeight * 1.2, vpH * 0.6);
     const progress = clamp(window.scrollY / journeyPx, 0, 1);
 
     // Phase 1 — hero logo -> watermark: instant seamless handoff, NO crossfade.
@@ -66,8 +72,8 @@ export function LogoScroll() {
     const startVy = logoRect.top + logoRect.height / 2 + window.scrollY;
     const heroCx = logoRect.left + logoRect.width / 2;
     const heroCy = logoRect.top + logoRect.height / 2;
-    const vpCx = window.innerWidth / 2;
-    const vpCy = window.innerHeight / 2;
+    const vpCx = vpW / 2;
+    const vpCy = vpH / 2;
 
     const reducedMotion = reducedMotionRef.current;
 
@@ -104,15 +110,14 @@ export function LogoScroll() {
     const footerIcon = document.getElementById("footer-cube-icon");
     if (footerIcon) {
       const contact = document.getElementById("contacto");
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const maxScroll = document.documentElement.scrollHeight - vpH;
       if (contact && maxScroll > 0) {
-        const vh = window.innerHeight;
         const contactRect = contact.getBoundingClientRect();
         // Journey starts when #contacto's top enters the viewport and
         // completes EXACTLY at the document end (bottom of the footer).
-        if (contactRect.top < vh) {
+        if (contactRect.top < vpH) {
           const scrollY = window.scrollY;
-          const scrollAtEnter = Math.max(0, scrollY + contactRect.top - vh);
+          const scrollAtEnter = Math.max(0, scrollY + contactRect.top - vpH);
           const range = maxScroll - scrollAtEnter;
           footerProgress = range > 0
             ? clamp((scrollY - scrollAtEnter) / range, 0, 1)
@@ -122,19 +127,17 @@ export function LogoScroll() {
 
       if (footerProgress > 0) {
         const footerRect = footerIcon.getBoundingClientRect();
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
         const targetX = footerRect.left + footerRect.width / 2;
         const targetY = footerRect.top + footerRect.height / 2;
 
         if (!reducedMotion) {
-          const deltaX = (targetX - centerX) * footerProgress;
-          const deltaY = (targetY - centerY) * footerProgress;
+          const deltaX = (targetX - vpCx) * footerProgress;
+          const deltaY = (targetY - vpCy) * footerProgress;
           const endScale = FOOTER_ICON_SIZE / WATERMARK_SIZE;
           const scale = 1 - (1 - endScale) * footerProgress;
           watermarkTransform = `translate(-50%, -50%) translate(${deltaX}px, ${deltaY}px) scale(${scale})`;
-          wmVx = centerX + deltaX;
-          wmVy = centerY + deltaY;
+          wmVx = vpCx + deltaX;
+          wmVy = vpCy + deltaY;
           wmScale = scale;
         }
 
