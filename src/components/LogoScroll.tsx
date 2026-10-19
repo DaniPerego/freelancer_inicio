@@ -72,18 +72,23 @@ export function LogoScroll() {
       watermarkOpacity = Math.min(0.2, (progress - 0.2) * 0.3);
     }
 
-    // Footer-targeted travel animation: progress driven by scroll-to-end so the
-    // journey completes even when the footer icon never reaches mid-viewport.
-    // Runs over the last 35% of the page so the landing feels slow and deliberate.
+    // Footer-targeted travel: keyed to the CONTACT section entering the viewport.
+    // 0 when #contacto's top is at the viewport bottom, 1 when it has risen
+    // 75% of the viewport — the footer sits right below, so landing coincides
+    // with the footer coming into sight. Pure function of position, so
+    // scrolling back up plays the exact reverse journey.
     let footerProgress = 0;
     const footerIcon = document.getElementById("footer-cube-icon");
     if (footerIcon) {
-      const footerRect = footerIcon.getBoundingClientRect();
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollToEnd = maxScroll > 0 ? window.scrollY / maxScroll : 0;
-      footerProgress = clamp((scrollToEnd - 0.65) / 0.35, 0, 1);
+      const contact = document.getElementById("contacto");
+      if (contact) {
+        const contactRect = contact.getBoundingClientRect();
+        const vh = window.innerHeight;
+        footerProgress = clamp((vh - contactRect.top) / (vh * 0.75), 0, 1);
+      }
 
       if (footerProgress > 0) {
+        const footerRect = footerIcon.getBoundingClientRect();
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
         const targetX = footerRect.left + footerRect.width / 2;
