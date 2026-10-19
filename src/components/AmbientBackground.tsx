@@ -73,7 +73,7 @@ export function AmbientBackground() {
     update();
 
     // Rotate the blinking cells to fresh grid positions periodically —
-    // they glide between cells (CSS transition on left/top).
+    // they snap instantly (no glide), like random lights turning on elsewhere.
     let shuffle: number | undefined;
     if (!reduced) {
       shuffle = window.setInterval(() => {
@@ -119,7 +119,7 @@ export function AmbientBackground() {
       />
       {/* Blinking cubes — snapped to grid cells; a radial mask follows the
           traveling logo (driven by LogoScroll via --wm-* vars) and cuts a
-          soft hole under it. Cells reshuffle + glide every few seconds. */}
+          soft hole under it. Cells reshuffle to random positions every 8s. */}
       <div
         className="absolute inset-0"
         style={{
@@ -141,7 +141,6 @@ export function AmbientBackground() {
               background: "var(--ambient-blink-color)",
               animationDelay: cube.delay,
               animationDuration: cube.duration,
-              transition: "left 1.5s ease, top 1.5s ease",
             }}
           />
         ))}

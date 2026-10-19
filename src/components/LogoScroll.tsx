@@ -57,33 +57,41 @@ export function LogoScroll() {
   const logoRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
   const reducedMotionRef = useRef(getReducedMotion());
+  // Layout snapshot (natural logo position, viewport size, hero height).
+  // Refreshed only on mount/resize — measuring every frame forces layout
+  // and makes the scroll start feel rough.
+  const layoutRef = useRef<{ natX: number; natY: number; vpW: number; vpH: number; heroH: number } | null>(null);
   const [mouse, setMouse] = useState<{ x: number | null; y: number | null }>({ x: null, y: null });
+
+  const measure = useCallback(() => {
+    const hero = heroRef.current;
+    const logo = logoRef.current;
+    if (!hero || !logo) return;
+    const natural = docPos(logo);
+    layoutRef.current = {
+      natX: natural.x + logo.offsetWidth / 2,
+      natY: natural.y + logo.offsetHeight / 2,
+      vpW: document.documentElement.clientWidth,
+      vpH: document.documentElement.clientHeight,
+      heroH: hero.offsetHeight,
+    };
+  }, []);
 
   const tick = useCallback(() => {
     rafRef.current = null;
 
-    const hero = heroRef.current;
+    const layout = layoutRef.current;
     const logo = logoRef.current;
-    if (!hero || !logo) return;
+    if (!layout || !logo) return;
 
+    const { natX: startCx0, natY: startCy0, vpW, vpH, heroH } = layout;
     const scrollY = window.scrollY;
-    // Layout viewport (excludes classic scrollbar). innerWidth INCLUDES it,
-    // which offsets the center math on desktop by ~8px.
-    const vpW = document.documentElement.clientWidth;
-    const vpH = document.documentElement.clientHeight;
     const vpCx = vpW / 2;
     const vpCy = vpH / 2;
 
-    // Frozen natural position (document coords, transform-immune). The whole
-    // journey is driven from HERE on the ONE logo element — no swap, no
-    // second copy, no jump at scroll start.
-    const natural = docPos(logo);
-    const startCx0 = natural.x + logo.offsetWidth / 2;
-    const startCy0 = natural.y + logo.offsetHeight / 2;
-
     // Phase 1 — logo -> viewport center. Journey starts at the very first
     // pixel of scroll and lasts at least 60% of the viewport.
-    const journeyPx = Math.max(hero.offsetHeight * 1.2, vpH * 0.6);
+    const journeyPx = Math.max(heroH * 1.2, vpH * 0.6);
     const progress = clamp(scrollY / journeyPx, 0, 1);
     const eased = smoothstep(progress);
 
@@ -91,22 +99,22 @@ export function LogoScroll() {
 
     // Phase 3 — footer travel, keyed to #contacto entering the viewport and
     // completing EXACTLY at the document end. Pure function of position, so
-    // scrolling back up plays the exact reverse journey.
+    // scrolling back up plays the exact reverse journey. Contact/footer
+    // positions come from the offset chain (document coords, no viewport
+    // reads): viewport Y = docY - scrollY.
     let footerProgress = 0;
     let maxScroll = 0;
     const footerIcon = document.getElementById("footer-cube-icon");
-    if (footerIcon) {
-      const contact = document.getElementById("contacto");
+    const contact = document.getElementById("contacto");
+    if (footerIcon && contact) {
       maxScroll = document.documentElement.scrollHeight - vpH;
-      if (contact && maxScroll > 0) {
-        const contactRect = contact.getBoundingClientRect();
-        if (contactRect.top < vpH) {
-          const scrollAtEnter = Math.max(0, scrollY + contactRect.top - vpH);
-          const range = maxScroll - scrollAtEnter;
-          footerProgress = range > 0
-            ? clamp((scrollY - scrollAtEnter) / range, 0, 1)
-            : 1;
-        }
+      const contactDocTop = docPos(contact).y;
+      if (maxScroll > 0 && contactDocTop - scrollY < vpH) {
+        const scrollAtEnter = Math.max(0, contactDocTop - vpH);
+        const range = maxScroll - scrollAtEnter;
+        footerProgress = range > 0
+          ? clamp((scrollY - scrollAtEnter) / range, 0, 1)
+          : 1;
       }
     }
 
@@ -119,9 +127,9 @@ export function LogoScroll() {
     let opacity = 1 - eased * 0.85; // settles at 0.15
 
     if (footerProgress > 0 && !reducedMotion && footerIcon) {
-      const footerRect = footerIcon.getBoundingClientRect();
-      const targetX = footerRect.left + footerRect.width / 2;
-      const targetY = footerRect.top + footerRect.height / 2;
+      const footerPos = docPos(footerIcon);
+      const targetX = footerPos.x + footerIcon.offsetWidth / 2;
+      const targetY = footerPos.y + footerIcon.offsetHeight / 2 - scrollY;
       tx = (vpCx + (targetX - vpCx) * footerProgress) - startCx0;
       ty = scrollY + (vpCy + (targetY - vpCy) * footerProgress) - startCy0;
       scale = 1 - (1 - FOOTER_ICON_SIZE / LOGO_SIZE) * footerProgress;
@@ -170,6 +178,7 @@ export function LogoScroll() {
     };
 
     const handleResize = () => {
+      measure();
       if (rafRef.current === null) {
         rafRef.current = requestAnimationFrame(tick);
       }
@@ -183,12 +192,22 @@ export function LogoScroll() {
       }
     };
 
+    // Initial layout snapshot + first tick
+    measure();
+    // Re-measure after fonts load (can shift the hero layout)
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        measure();
+        if (rafRef.current === null) {
+          rafRef.current = requestAnimationFrame(tick);
+        }
+      });
+    }
+    tick();
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleResize, { passive: true });
     mediaQuery.addEventListener("change", handleMotionChange);
-
-    // Initial tick
-    tick();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -202,7 +221,7 @@ export function LogoScroll() {
       document.documentElement.style.removeProperty("--wm-vy");
       document.documentElement.style.removeProperty("--wm-hole");
     };
-  }, [tick]);
+  }, [tick, measure]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const el = logoRef.current;
