@@ -1,35 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Grid tile geometry — must match the background pattern SVG exactly
 const GRID = 24;
 const CUBE_PAD = 3;
 const CUBE_SIZE = 18;
+const BLINK_COUNT = 12;
+const SHUFFLE_MS = 8000;
 
-interface BlinkSeed {
-  fx: number;
-  fy: number;
+interface LiveCube {
+  left: number;
+  top: number;
   delay: string;
   duration: string;
 }
 
-// Viewport fractions — snapped to exact grid cells after mount so the
-// blinking cubes ARE grid cells of the background pattern, not floating dots.
-const blinkSeeds: BlinkSeed[] = [
-  { fx: 0.06, fy: 0.1, delay: "0s", duration: "6.2s" },
-  { fx: 0.18, fy: 0.32, delay: "1.4s", duration: "7.5s" },
-  { fx: 0.31, fy: 0.08, delay: "2.8s", duration: "5.3s" },
-  { fx: 0.44, fy: 0.48, delay: "0.7s", duration: "8.1s" },
-  { fx: 0.58, fy: 0.22, delay: "3.5s", duration: "6.7s" },
-  { fx: 0.7, fy: 0.38, delay: "1.1s", duration: "4.9s" },
-  { fx: 0.85, fy: 0.12, delay: "4.2s", duration: "7.8s" },
-  { fx: 0.12, fy: 0.62, delay: "2.2s", duration: "5.6s" },
-  { fx: 0.26, fy: 0.78, delay: "5s", duration: "8.4s" },
-  { fx: 0.5, fy: 0.7, delay: "0.3s", duration: "6s" },
-  { fx: 0.66, fy: 0.85, delay: "3.8s", duration: "7.2s" },
-  { fx: 0.9, fy: 0.55, delay: "1.9s", duration: "5.9s" },
-];
+// Deterministic PRNG (mulberry32) — seeded per shuffle cycle so cell picks
+// are random-looking but SSR-safe and stable within a cycle.
+function mulberry32(seed: number) {
+  let a = seed;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
 
 function makePatternDataUri(fill: string, opacity: number) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><rect x="3" y="3" width="18" height="18" rx="4" fill="${fill}" opacity="${opacity}"/></svg>`;
@@ -39,38 +37,56 @@ function makePatternDataUri(fill: string, opacity: number) {
 const lightPattern = makePatternDataUri("#171717", 1);
 const darkPattern = makePatternDataUri("#ededed", 1);
 
-interface LiveCube {
-  left: number;
-  top: number;
-  delay: string;
-  duration: string;
-}
-
-function gridCubes(): LiveCube[] {
+// Pick BLINK_COUNT unique grid cells for a given shuffle seed.
+function gridCubes(seed: number): LiveCube[] {
   const cols = Math.max(1, Math.ceil(window.innerWidth / GRID));
   const rows = Math.max(1, Math.ceil(window.innerHeight / GRID));
-  return blinkSeeds.map((s) => {
-    const col = Math.min(cols - 1, Math.round(s.fx * (cols - 1)));
-    const row = Math.min(rows - 1, Math.round(s.fy * (rows - 1)));
-    return {
+  const rand = mulberry32(seed * 7919 + 17);
+  const used = new Set<number>();
+  const cubes: LiveCube[] = [];
+  let guard = 0;
+  while (cubes.length < BLINK_COUNT && guard++ < 400) {
+    const col = Math.floor(rand() * cols);
+    const row = Math.floor(rand() * rows);
+    const key = row * cols + col;
+    if (used.has(key)) continue;
+    used.add(key);
+    cubes.push({
       left: col * GRID + CUBE_PAD,
       top: row * GRID + CUBE_PAD,
-      delay: s.delay,
-      duration: s.duration,
-    };
-  });
+      delay: `${(rand() * 8).toFixed(1)}s`,
+      duration: `${(5 + rand() * 4).toFixed(1)}s`,
+    });
+  }
+  return cubes;
 }
 
 export function AmbientBackground() {
   // Empty on SSR + first client render — populated in useEffect to keep
   // grid math client-only and avoid hydration mismatch.
   const [cubes, setCubes] = useState<LiveCube[]>([]);
+  const seedRef = useRef(1);
 
   useEffect(() => {
-    const update = () => setCubes(gridCubes());
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const update = () => setCubes(gridCubes(seedRef.current));
     update();
+
+    // Rotate the blinking cells to fresh grid positions periodically —
+    // they glide between cells (CSS transition on left/top).
+    let shuffle: number | undefined;
+    if (!reduced) {
+      shuffle = window.setInterval(() => {
+        seedRef.current += 1;
+        setCubes(gridCubes(seedRef.current));
+      }, SHUFFLE_MS);
+    }
+
     window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+    return () => {
+      if (shuffle !== undefined) window.clearInterval(shuffle);
+      window.removeEventListener("resize", update);
+    };
   }, []);
 
   return (
@@ -101,10 +117,9 @@ export function AmbientBackground() {
           opacity: "var(--ambient-glow-opacity)",
         }}
       />
-      {/* Blinking cubes — snapped to the exact cells of the pattern above.
-          A radial mask follows the watermark (driven by LogoScroll via --wm-*
-          vars) and cuts a soft hole under it, so blinks never shine through
-          the translucent cubes — while staying alive everywhere else. */}
+      {/* Blinking cubes — snapped to grid cells; a radial mask follows the
+          traveling logo (driven by LogoScroll via --wm-* vars) and cuts a
+          soft hole under it. Cells reshuffle + glide every few seconds. */}
       <div
         className="absolute inset-0"
         style={{
@@ -123,9 +138,10 @@ export function AmbientBackground() {
               top: cube.top,
               width: CUBE_SIZE,
               height: CUBE_SIZE,
-              background: "var(--accent)",
+              background: "var(--ambient-blink-color)",
               animationDelay: cube.delay,
               animationDuration: cube.duration,
+              transition: "left 1.5s ease, top 1.5s ease",
             }}
           />
         ))}

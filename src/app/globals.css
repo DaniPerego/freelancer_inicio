@@ -10,6 +10,8 @@
   --card: #ffffff;
   --ambient-pattern-opacity: 0.025;
   --ambient-glow-opacity: 0.025;
+  /* Deeper orange reads stronger on light backgrounds */
+  --ambient-blink-color: var(--accent-hover);
 }
 
 .dark {
@@ -22,6 +24,7 @@
   --card: #141414;
   --ambient-pattern-opacity: 0.035;
   --ambient-glow-opacity: 0.04;
+  --ambient-blink-color: var(--accent);
 }
 
 @theme inline {
@@ -75,5 +78,6 @@ a {
   .ambient-cube {
     animation: none;
     opacity: 0.3;
+    transition: none;
   }
 }

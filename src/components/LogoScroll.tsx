@@ -153,11 +153,11 @@ export function LogoScroll() {
     }
 
     // Publish the traveler's viewport center + size so AmbientBackground can
-    // cut a soft hole in the blink layer exactly under it. Negative hole = none.
-    const showCubes = !reducedMotion && (progress > 0 || footerProgress > 0);
+    // cut a soft hole in the blink layer exactly under it — at rest AND while
+    // traveling. Negative hole = none (only after landing, opacity ~0).
     const viewCx = startCx0 + tx;
     const viewCy = startCy0 - scrollY + ty;
-    const holeR = showCubes && opacity > 0.01 ? (LOGO_SIZE * scale) / 2 + 12 : -32;
+    const holeR = opacity > 0.01 ? (LOGO_SIZE * scale) / 2 + 12 : -32;
     document.documentElement.style.setProperty("--wm-vx", `${viewCx}px`);
     document.documentElement.style.setProperty("--wm-vy", `${viewCy}px`);
     document.documentElement.style.setProperty("--wm-hole", `${holeR}px`);
