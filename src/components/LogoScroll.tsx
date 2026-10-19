@@ -54,33 +54,30 @@ export function LogoScroll() {
     const heroHeight = hero.offsetHeight;
     const progress = Math.min(1, Math.max(0, -heroRect.top / (heroHeight * 1.2)));
 
-    // Hero logo: scale / blur / fade driven by scroll
-    const heroScale = 1 - progress * 0.6;
-    const heroOpacity = 1 - progress * 0.85;
-    const heroBlur = progress * 12;
+    // Phase 1 — hero logo -> watermark: ONE continuous journey. The fixed
+    // watermark starts exactly on the hero logo and glides to viewport center
+    // as the hero scrolls away; the real logo fades out fast so the watermark
+    // takes over visually. Scroll up plays it in reverse by construction.
+    const logoRect = logo.getBoundingClientRect();
+    const heroCx = logoRect.left + logoRect.width / 2;
+    const heroCy = logoRect.top + logoRect.height / 2;
+    const vpCx = window.innerWidth / 2;
+    const vpCy = window.innerHeight / 2;
 
-    logo.style.opacity = String(heroOpacity);
-    logo.style.filter = `blur(${heroBlur}px)`;
-    logo.style.transform = `scale(${heroScale})`;
-
-    // Watermark base state
-    let watermarkOpacity = 0;
-    let watermarkTransform = "translate(-50%, -50%)";
     const reducedMotion = reducedMotionRef.current;
 
-    if (progress > 0.2) {
-      watermarkOpacity = Math.min(0.2, (progress - 0.2) * 0.3);
-    }
+    // Real hero logo: gone by 35% of hero scroll — the watermark "is" it now
+    const heroFade = clamp(progress / 0.35, 0, 1);
+    logo.style.opacity = String(1 - heroFade);
+    logo.style.filter = `blur(${heroFade * 12}px)`;
+    logo.style.transform = `scale(${1 - progress * 0.6})`;
 
-    // Footer-targeted travel: keyed to the CONTACT section entering the viewport.
-    // 0 when #contacto's top is at the viewport bottom, 1 when it has risen
-    // 75% of the viewport — the footer sits right below, so landing coincides
-    // with the footer coming into sight. Pure function of position, so
-    // scrolling back up plays the exact reverse journey.
-    // Watermark viewport position (for AmbientBackground's blink mask)
-    let wmVx = window.innerWidth / 2;
-    let wmVy = window.innerHeight / 2;
+    // Watermark glides hero-logo-position -> viewport center, opacity 1 -> 0.2
+    let wmVx = reducedMotion ? vpCx : heroCx + (vpCx - heroCx) * progress;
+    let wmVy = reducedMotion ? vpCy : heroCy + (vpCy - heroCy) * progress;
     let wmScale = 1;
+    let watermarkOpacity = progress >= 1 ? 0.2 : 1 - progress * 0.8;
+    let watermarkTransform = `translate(-50%, -50%) translate(${wmVx - vpCx}px, ${wmVy - vpCy}px)`;
 
     let footerProgress = 0;
     const footerIcon = document.getElementById("footer-cube-icon");
@@ -122,11 +119,13 @@ export function LogoScroll() {
 
         watermarkOpacity = 0.2 * (1 - footerProgress);
 
-        // Footer icon "receive": grows and turns accent as the watermark lands,
-        // and STAYS that way — the cubes arrived home.
+        // Footer icon "receive": only kicks in during the LAST 20% of the
+        // journey — by then the footer is fully on screen, so you actually
+        // SEE the cubes arrive and the icon light up + grow. Stays that way.
         if (!reducedMotion) {
-          footerIcon.style.setProperty("--cube-pop", String(1 + footerProgress * 0.4));
-          footerIcon.style.color = footerProgress > 0.15 ? "var(--accent)" : "";
+          const receive = clamp((footerProgress - 0.8) / 0.2, 0, 1);
+          footerIcon.style.setProperty("--cube-pop", String(1 + receive * 0.45));
+          footerIcon.style.color = receive > 0 ? "var(--accent)" : "";
         }
       } else {
         footerIcon.style.setProperty("--cube-pop", "1");
