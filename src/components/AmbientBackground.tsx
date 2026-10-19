@@ -117,33 +117,29 @@ export function AmbientBackground() {
           opacity: "var(--ambient-glow-opacity)",
         }}
       />
-      {/* Blinking cubes — snapped to grid cells; a radial mask follows the
-          traveling logo (driven by LogoScroll via --wm-* vars) and cuts a
-          soft hole under it. Cells reshuffle to random positions every 8s. */}
-      <div
-        className="absolute inset-0"
-        style={{
-          maskImage:
-            "radial-gradient(circle at var(--wm-vx, 50%) var(--wm-vy, 50%), transparent var(--wm-hole, 0px), black calc(var(--wm-hole, 0px) + 24px))",
-          WebkitMaskImage:
-            "radial-gradient(circle at var(--wm-vx, 50%) var(--wm-vy, 50%), transparent var(--wm-hole, 0px), black calc(var(--wm-hole, 0px) + 24px))",
-        }}
-      >
-        {cubes.map((cube, i) => (
-          <div
-            key={i}
-            className="ambient-cube absolute rounded"
-            style={{
-              left: cube.left,
-              top: cube.top,
-              width: CUBE_SIZE,
-              height: CUBE_SIZE,
-              background: "var(--ambient-blink-color)",
-              animationDelay: cube.delay,
-              animationDuration: cube.duration,
-            }}
-          />
-        ))}
+      {/* Blinking cubes — two nested mask layers, written directly by
+          LogoScroll per frame:
+          #blink-column-mask dims blinks across the central text band so
+          titles/copy stay readable; #blink-hole-mask cuts a soft hole under
+          the traveling logo. Cells reshuffle to random positions every 8s. */}
+      <div id="blink-column-mask" className="absolute inset-0">
+        <div id="blink-hole-mask" className="absolute inset-0">
+          {cubes.map((cube, i) => (
+            <div
+              key={i}
+              className="ambient-cube absolute rounded"
+              style={{
+                left: cube.left,
+                top: cube.top,
+                width: CUBE_SIZE,
+                height: CUBE_SIZE,
+                background: "var(--ambient-blink-color)",
+                animationDelay: cube.delay,
+                animationDuration: cube.duration,
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -57,10 +57,25 @@ export function LogoScroll() {
   const logoRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
   const reducedMotionRef = useRef(getReducedMotion());
-  // Layout snapshot (natural logo position, viewport size, hero height).
-  // Refreshed only on mount/resize — measuring every frame forces layout
-  // and makes the scroll start feel rough.
-  const layoutRef = useRef<{ natX: number; natY: number; vpW: number; vpH: number; heroH: number } | null>(null);
+  // Layout snapshot (natural logo position, viewport size, hero height,
+  // content text band for the blink dim). Refreshed only on mount/resize —
+  // measuring every frame forces layout and makes the scroll start rough.
+  const layoutRef = useRef<{
+    natX: number;
+    natY: number;
+    vpW: number;
+    vpH: number;
+    heroH: number;
+    bandX0: number;
+    bandX1: number;
+  } | null>(null);
+  // Inertial smoothing: wheel/momentum scroll moves in discrete steps, which
+  // makes the logo journey feel chunky at the start. The logo follows an
+  // eased copy of scrollY instead — same destination, buttery path.
+  const smoothYRef = useRef<number | null>(null);
+  // Last written mask strings — skip style writes when unchanged.
+  const holeMaskRef = useRef<string | null>(null);
+  const columnMaskRef = useRef<string | null>(null);
   const [mouse, setMouse] = useState<{ x: number | null; y: number | null }>({ x: null, y: null });
 
   const measure = useCallback(() => {
@@ -68,13 +83,21 @@ export function LogoScroll() {
     const logo = logoRef.current;
     if (!hero || !logo) return;
     const natural = docPos(logo);
+    const vpW = document.documentElement.clientWidth;
+    const vpH = document.documentElement.clientHeight;
+    // Content text band (max-w-4xl centered + px-6 padding) — blinks dim
+    // inside it so titles/copy stay readable, and stay strong in the margins.
+    const band = Math.min(896, vpW - 48);
     layoutRef.current = {
       natX: natural.x + logo.offsetWidth / 2,
       natY: natural.y + logo.offsetHeight / 2,
-      vpW: document.documentElement.clientWidth,
-      vpH: document.documentElement.clientHeight,
+      vpW,
+      vpH,
       heroH: hero.offsetHeight,
+      bandX0: Math.max(24, (vpW - band) / 2),
+      bandX1: Math.min(vpW - 24, (vpW + band) / 2),
     };
+    if (smoothYRef.current === null) smoothYRef.current = window.scrollY;
   }, []);
 
   const tick = useCallback(() => {
@@ -84,18 +107,28 @@ export function LogoScroll() {
     const logo = logoRef.current;
     if (!layout || !logo) return;
 
-    const { natX: startCx0, natY: startCy0, vpW, vpH, heroH } = layout;
-    const scrollY = window.scrollY;
+    const { natX: startCx0, natY: startCy0, vpW, vpH, heroH, bandX0, bandX1 } = layout;
+    const targetY = window.scrollY;
+    const reducedMotion = reducedMotionRef.current;
+
+    // Inertial smoothing of the scroll position for the traveler only.
+    let smoothY = smoothYRef.current ?? targetY;
+    if (reducedMotion) {
+      smoothY = targetY;
+    } else {
+      smoothY += (targetY - smoothY) * 0.22;
+      if (Math.abs(targetY - smoothY) < 0.4) smoothY = targetY;
+    }
+    smoothYRef.current = smoothY;
+
     const vpCx = vpW / 2;
     const vpCy = vpH / 2;
 
     // Phase 1 — logo -> viewport center. Journey starts at the very first
     // pixel of scroll and lasts at least 60% of the viewport.
     const journeyPx = Math.max(heroH * 1.2, vpH * 0.6);
-    const progress = clamp(scrollY / journeyPx, 0, 1);
+    const progress = clamp(smoothY / journeyPx, 0, 1);
     const eased = smoothstep(progress);
-
-    const reducedMotion = reducedMotionRef.current;
 
     // Phase 3 — footer travel, keyed to #contacto entering the viewport and
     // completing EXACTLY at the document end. Pure function of position, so
@@ -109,11 +142,11 @@ export function LogoScroll() {
     if (footerIcon && contact) {
       maxScroll = document.documentElement.scrollHeight - vpH;
       const contactDocTop = docPos(contact).y;
-      if (maxScroll > 0 && contactDocTop - scrollY < vpH) {
+      if (maxScroll > 0 && contactDocTop - smoothY < vpH) {
         const scrollAtEnter = Math.max(0, contactDocTop - vpH);
         const range = maxScroll - scrollAtEnter;
         footerProgress = range > 0
-          ? clamp((scrollY - scrollAtEnter) / range, 0, 1)
+          ? clamp((smoothY - scrollAtEnter) / range, 0, 1)
           : 1;
       }
     }
@@ -122,16 +155,16 @@ export function LogoScroll() {
     // Phases 1+2: pinned glide from the frozen start to viewport center.
     // Phase 3: center -> footer icon, shrinking to icon size, fading out.
     let tx = (vpCx - startCx0) * eased;
-    let ty = scrollY + (vpCy - startCy0) * eased;
+    let ty = smoothY + (vpCy - startCy0) * eased;
     let scale = 1;
     let opacity = 1 - eased * 0.85; // settles at 0.15
 
     if (footerProgress > 0 && !reducedMotion && footerIcon) {
       const footerPos = docPos(footerIcon);
       const targetX = footerPos.x + footerIcon.offsetWidth / 2;
-      const targetY = footerPos.y + footerIcon.offsetHeight / 2 - scrollY;
+      const targetYIcon = footerPos.y + footerIcon.offsetHeight / 2 - targetY;
       tx = (vpCx + (targetX - vpCx) * footerProgress) - startCx0;
-      ty = scrollY + (vpCy + (targetY - vpCy) * footerProgress) - startCy0;
+      ty = smoothY + (vpCy + (targetYIcon - vpCy) * footerProgress) - startCy0;
       scale = 1 - (1 - FOOTER_ICON_SIZE / LOGO_SIZE) * footerProgress;
       opacity = (1 - eased * 0.85) * (1 - footerProgress);
     }
@@ -155,20 +188,45 @@ export function LogoScroll() {
     // document end. CSS transition (always on) animates BOTH directions —
     // grow + color on arrival, smooth return when scrolling back up.
     if (footerIcon && !reducedMotion) {
-      const atEnd = maxScroll > 0 && scrollY >= maxScroll - 1;
+      const atEnd = maxScroll > 0 && targetY >= maxScroll - 1;
       footerIcon.style.setProperty("--cube-pop", atEnd ? "1.45" : "1");
       footerIcon.style.color = atEnd ? "var(--accent)" : "";
     }
 
-    // Publish the traveler's viewport center + size so AmbientBackground can
-    // cut a soft hole in the blink layer exactly under it — at rest AND while
-    // traveling. Negative hole = none (only after landing, opacity ~0).
+    // Blink masks, written directly (no root CSS vars — cheaper per frame):
+    // hole under the traveler + dim across the central text band.
     const viewCx = startCx0 + tx;
-    const viewCy = startCy0 - scrollY + ty;
+    const viewCy = startCy0 - targetY + ty;
     const holeR = opacity > 0.01 ? (LOGO_SIZE * scale) / 2 + 12 : -32;
-    document.documentElement.style.setProperty("--wm-vx", `${viewCx}px`);
-    document.documentElement.style.setProperty("--wm-vy", `${viewCy}px`);
-    document.documentElement.style.setProperty("--wm-hole", `${holeR}px`);
+    const holeMask = `radial-gradient(circle at ${viewCx}px ${viewCy}px, transparent ${holeR}px, black ${holeR + 24}px)`;
+    if (holeMask !== holeMaskRef.current) {
+      holeMaskRef.current = holeMask;
+      const el = document.getElementById("blink-hole-mask");
+      if (el) {
+        el.style.setProperty("mask-image", holeMask);
+        el.style.setProperty("-webkit-mask-image", holeMask);
+      }
+    }
+    const columnKey = `${bandX0}|${bandX1}`;
+    if (columnKey !== columnMaskRef.current) {
+      columnMaskRef.current = columnKey;
+      const feather = 48;
+      const a = Math.max(0, bandX0 - feather);
+      const b = Math.min(vpW, bandX1 + feather);
+      const columnMask =
+        `linear-gradient(90deg, #000 0px, #000 ${a}px, rgba(0,0,0,0.22) ${bandX0}px, rgba(0,0,0,0.22) ${bandX1}px, #000 ${b}px, #000 ${vpW}px)`;
+      const el = document.getElementById("blink-column-mask");
+      if (el) {
+        el.style.setProperty("mask-image", columnMask);
+        el.style.setProperty("-webkit-mask-image", columnMask);
+      }
+    }
+
+    // Keep the rAF loop alive while the smoothed value catches up (wheel
+    // steps / momentum bursts) so the logo never waits for the next event.
+    if (smoothY !== targetY && rafRef.current === null) {
+      rafRef.current = requestAnimationFrame(tick);
+    }
   }, []);
 
   useEffect(() => {
@@ -217,9 +275,6 @@ export function LogoScroll() {
         cancelAnimationFrame(rafRef.current);
         rafRef.current = null;
       }
-      document.documentElement.style.removeProperty("--wm-vx");
-      document.documentElement.style.removeProperty("--wm-vy");
-      document.documentElement.style.removeProperty("--wm-hole");
     };
   }, [tick, measure]);
 
