@@ -101,22 +101,29 @@ export function AmbientBackground() {
           opacity: "var(--ambient-glow-opacity)",
         }}
       />
-      {/* Blinking cubes — snapped to the exact cells of the pattern above */}
-      {cubes.map((cube, i) => (
-        <div
-          key={i}
-          className="ambient-cube absolute rounded"
-          style={{
-            left: cube.left,
-            top: cube.top,
-            width: CUBE_SIZE,
-            height: CUBE_SIZE,
-            background: "var(--accent)",
-            animationDelay: cube.delay,
-            animationDuration: cube.duration,
-          }}
-        />
-      ))}
+      {/* Blinking cubes — snapped to the exact cells of the pattern above.
+          Wrapped in a dimming layer driven by LogoScroll via --ambient-blink-opacity
+          so blinks never shine through the translucent watermark. */}
+      <div
+        className="absolute inset-0"
+        style={{ opacity: "var(--ambient-blink-opacity, 1)" }}
+      >
+        {cubes.map((cube, i) => (
+          <div
+            key={i}
+            className="ambient-cube absolute rounded"
+            style={{
+              left: cube.left,
+              top: cube.top,
+              width: CUBE_SIZE,
+              height: CUBE_SIZE,
+              background: "var(--accent)",
+              animationDelay: cube.delay,
+              animationDuration: cube.duration,
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }

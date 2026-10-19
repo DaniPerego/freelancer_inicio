@@ -75,12 +75,13 @@ export function LogoScroll() {
     // Footer-targeted travel animation: progress driven by scroll-to-end so the
     // journey completes even when the footer icon never reaches mid-viewport.
     // Runs over the last 35% of the page so the landing feels slow and deliberate.
+    let footerProgress = 0;
     const footerIcon = document.getElementById("footer-cube-icon");
     if (footerIcon) {
       const footerRect = footerIcon.getBoundingClientRect();
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const scrollToEnd = maxScroll > 0 ? window.scrollY / maxScroll : 0;
-      const footerProgress = clamp((scrollToEnd - 0.65) / 0.35, 0, 1);
+      footerProgress = clamp((scrollToEnd - 0.65) / 0.35, 0, 1);
 
       if (footerProgress > 0) {
         const centerX = window.innerWidth / 2;
@@ -112,6 +113,12 @@ export function LogoScroll() {
 
     watermarkSvg.style.transform = watermarkTransform;
     watermarkSvg.style.opacity = String(watermarkOpacity);
+
+    // Suppress ambient background blinks while the watermark is on screen —
+    // a bright blink behind the translucent watermark looks dirty.
+    // blinkOpacity: 1 (no watermark) -> 0 (full watermark), back to 1 after landing.
+    const blinkOpacity = 1 - Math.min(1, watermarkOpacity / 0.2);
+    document.documentElement.style.setProperty("--ambient-blink-opacity", String(blinkOpacity));
   }, []);
 
   useEffect(() => {
@@ -150,6 +157,7 @@ export function LogoScroll() {
         cancelAnimationFrame(rafRef.current);
         rafRef.current = null;
       }
+      document.documentElement.style.removeProperty("--ambient-blink-opacity");
     };
   }, [tick]);
 
