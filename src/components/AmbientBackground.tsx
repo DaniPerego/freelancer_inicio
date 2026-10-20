@@ -34,7 +34,16 @@ function makePatternDataUri(fill: string, opacity: number) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 }
 
-const lightPattern = makePatternDataUri("#171717", 1);
+// Light-theme tile: embossed ivory cubes — offset drop shadow + marfil face
+// + top-left highlight arc and bottom-right shade arc for a relief feel.
+const EMBOSSED_TILE =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">' +
+  '<rect x="4" y="4" width="18" height="18" rx="4" fill="#c9bda0"/>' +
+  '<rect x="3" y="3" width="18" height="18" rx="4" fill="#f1e9d6"/>' +
+  '<path d="M3 7a4 4 0 0 1 4-4h10" fill="none" stroke="#fffdf5" stroke-width="1.2"/>' +
+  '<path d="M21 17a4 4 0 0 1-4 4H7" fill="none" stroke="#b5a685" stroke-width="1.2"/>' +
+  "</svg>";
+const lightPattern = `url("data:image/svg+xml,${encodeURIComponent(EMBOSSED_TILE)}")`;
 const darkPattern = makePatternDataUri("#ededed", 1);
 
 // Pick BLINK_COUNT unique grid cells for a given shuffle seed.
