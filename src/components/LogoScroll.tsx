@@ -76,6 +76,8 @@ export function LogoScroll() {
   // Last written mask strings — skip style writes when unchanged.
   const holeMaskRef = useRef<string | null>(null);
   const columnMaskRef = useRef<string | null>(null);
+  // Traveler handoff at the document end: dissolved into the footer icon.
+  const handedOffRef = useRef(false);
   const [mouse, setMouse] = useState<{ x: number | null; y: number | null }>({ x: null, y: null });
 
   const measure = useCallback(() => {
@@ -152,8 +154,10 @@ export function LogoScroll() {
     }
 
     // Compose the ONE traveler's transform.
-    // Phases 1+2: pinned glide from the frozen start to viewport center.
-    // Phase 3: center -> footer icon, shrinking to icon size, fading out.
+    // Phases 1+2: pinned glide from the frozen start to viewport center,
+    // fading 1 -> 0.15. Phase 3: center -> footer icon, shrinking to icon
+    // size while GAINING color back (0.15 -> 1) — the cubes revive as they
+    // fly home, then dissolve into the icon at the absolute document end.
     let tx = (vpCx - startCx0) * eased;
     let ty = smoothY + (vpCy - startCy0) * eased;
     let scale = 1;
@@ -166,7 +170,18 @@ export function LogoScroll() {
       tx = (vpCx + (targetX - vpCx) * footerProgress) - startCx0;
       ty = smoothY + (vpCy + (targetYIcon - vpCy) * footerProgress) - startCy0;
       scale = 1 - (1 - FOOTER_ICON_SIZE / LOGO_SIZE) * footerProgress;
-      opacity = (1 - eased * 0.85) * (1 - footerProgress);
+      const revive = smoothstep(footerProgress);
+      opacity = opacity + (1 - opacity) * revive;
+    }
+
+    // Footer icon "receive": armed only when the scroll hits the ABSOLUTE
+    // document end. CSS transition (always on) animates BOTH directions —
+    // grow + color on arrival, smooth return when scrolling back up.
+    let atEnd = false;
+    if (footerIcon && !reducedMotion) {
+      atEnd = maxScroll > 0 && targetY >= maxScroll - 1;
+      footerIcon.style.setProperty("--cube-pop", atEnd ? "1.45" : "1");
+      footerIcon.style.color = atEnd ? "var(--accent)" : "";
     }
 
     if (reducedMotion) {
@@ -179,18 +194,23 @@ export function LogoScroll() {
       logo.style.transform = "none";
       logo.style.pointerEvents = "";
     } else {
-      logo.style.opacity = String(opacity);
       logo.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
       logo.style.pointerEvents = "none";
-    }
-
-    // Footer icon "receive": armed only when the scroll hits the ABSOLUTE
-    // document end. CSS transition (always on) animates BOTH directions —
-    // grow + color on arrival, smooth return when scrolling back up.
-    if (footerIcon && !reducedMotion) {
-      const atEnd = maxScroll > 0 && targetY >= maxScroll - 1;
-      footerIcon.style.setProperty("--cube-pop", atEnd ? "1.45" : "1");
-      footerIcon.style.color = atEnd ? "var(--accent)" : "";
+      if (atEnd) {
+        // Handoff: the full-color cubes dissolve INTO the icon (same 450ms
+        // beat as the icon's pop) — never a static 16px copy stuck on top.
+        if (!handedOffRef.current) {
+          handedOffRef.current = true;
+          logo.style.transition = "opacity 450ms ease-out";
+        }
+        logo.style.opacity = "0";
+      } else {
+        if (handedOffRef.current) {
+          handedOffRef.current = false;
+          logo.style.transition = "";
+        }
+        logo.style.opacity = String(opacity);
+      }
     }
 
     // Blink masks, written directly (no root CSS vars — cheaper per frame):
