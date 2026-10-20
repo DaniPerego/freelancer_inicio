@@ -22,7 +22,7 @@
   --muted: #a1a1aa;
   --border: #262626;
   --card: #141414;
-  --ambient-pattern-opacity: 0.025;
+  --ambient-pattern-opacity: 0.018;
   --ambient-glow-opacity: 0.04;
   --ambient-blink-color: var(--accent);
 }
