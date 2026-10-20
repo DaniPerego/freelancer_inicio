@@ -8,8 +8,8 @@
   --muted: #737373;
   --border: #e5e5e5;
   --card: #ffffff;
-  --ambient-pattern-opacity: 0.025;
-  --ambient-glow-opacity: 0.025;
+  --ambient-pattern-opacity: 0.04;
+  --ambient-glow-opacity: 0.03;
   /* Deeper orange reads stronger on light backgrounds */
   --ambient-blink-color: var(--accent-hover);
 }
