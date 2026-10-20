@@ -5,6 +5,10 @@
   --foreground: #171717;
   --accent: #e85d04;
   --accent-hover: #d45203;
+  /* Deep accent: white text passes WCAG AA (4.9:1) — active pills etc. */
+  --accent-deep: #c24a02;
+  /* Text-safe accent: small text passes AA on light bg (5.1:1) */
+  --accent-text: #b84700;
   --muted: #737373;
   --border: #e5e5e5;
   --card: #ffffff;
@@ -19,6 +23,9 @@
   --foreground: #ededed;
   --accent: #e85d04;
   --accent-hover: #ff7b1a;
+  --accent-deep: #c24a02;
+  /* Bright accent passes AA on dark bg (5.7:1) */
+  --accent-text: #e85d04;
   --muted: #a1a1aa;
   --border: #262626;
   --card: #141414;
@@ -32,6 +39,8 @@
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
+  --color-accent-deep: var(--accent-deep);
+  --color-accent-text: var(--accent-text);
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-card: var(--card);

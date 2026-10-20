@@ -38,9 +38,12 @@ export function PageContent() {
     <>
       <AmbientBackground />
 
+      {/* Landmark: main wraps the dominant page content (hero + sections).
+          Footer and modal stay outside, per HTML semantics. */}
+      <main>
       {/* Hero */}
       <header className="relative flex flex-col items-center justify-center min-h-[70vh] px-6 pt-16 sm:pt-0 text-center">
-        <p className="text-accent font-mono text-xs tracking-[0.2em] uppercase mb-4">
+        <p className="text-accent-text font-mono text-xs tracking-[0.2em] uppercase mb-4">
           {t("location")}
         </p>
         <h1 className="text-4xl sm:text-4xl font-bold tracking-tight mb-3 text-accent">
@@ -81,7 +84,7 @@ export function PageContent() {
       {/* Servicios */}
       <section id="servicios" className="relative py-20 px-6">
         <div className="max-w-4xl mx-auto">
-          <p className="text-accent font-mono text-xs tracking-[0.2em] uppercase mb-3">
+          <p className="text-accent-text font-mono text-xs tracking-[0.2em] uppercase mb-3">
             {t("servicesLabel")}
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold mb-10">
@@ -105,7 +108,7 @@ export function PageContent() {
       {/* Metodología */}
       <section id="metodologia" className="relative py-20 px-6 border-t border-border">
         <div className="max-w-4xl mx-auto">
-          <p className="text-accent font-mono text-xs tracking-[0.2em] uppercase mb-3">
+          <p className="text-accent-text font-mono text-xs tracking-[0.2em] uppercase mb-3">
             {t("methodologyLabel")}
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold mb-10">
@@ -210,7 +213,7 @@ export function PageContent() {
       {/* Proyectos */}
       <section id="proyectos" className="relative py-20 px-6 border-t border-border">
         <div className="max-w-4xl mx-auto">
-          <p className="text-accent font-mono text-xs tracking-[0.2em] uppercase mb-3">
+          <p className="text-accent-text font-mono text-xs tracking-[0.2em] uppercase mb-3">
             {t("projectsLabel")}
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold mb-10">
@@ -229,6 +232,7 @@ export function PageContent() {
                     alt={t(project.name)}
                     width={1280}
                     height={800}
+                    sizes="(max-width: 640px) 100vw, 50vw"
                     loading="lazy"
                     className="w-full h-auto transition-transform duration-300 group-hover:scale-105"
                   />
@@ -261,7 +265,7 @@ export function PageContent() {
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {project.tags.map((tag) => (
-                      <span key={tag} className="text-xs text-muted/70">
+                      <span key={tag} className="text-xs text-muted">
                         {tag}
                       </span>
                     ))}
@@ -276,7 +280,7 @@ export function PageContent() {
       {/* Skills */}
       <section id="skills" className="relative py-20 px-6">
         <div className="max-w-4xl mx-auto">
-          <p className="text-accent font-mono text-xs tracking-[0.2em] uppercase mb-3">
+          <p className="text-accent-text font-mono text-xs tracking-[0.2em] uppercase mb-3">
             {t("skillsLabel")}
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold mb-10">
@@ -315,7 +319,7 @@ export function PageContent() {
       {/* Contacto */}
       <section id="contacto" className="relative py-20 px-6 border-t border-border">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-accent font-mono text-xs tracking-[0.2em] uppercase mb-3">
+          <p className="text-accent-text font-mono text-xs tracking-[0.2em] uppercase mb-3">
             {t("contactLabel")}
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold mb-6">
@@ -419,6 +423,7 @@ export function PageContent() {
           </div>
         </div>
       </section>
+      </main>
 
       {/* Footer */}
       <footer className="relative py-8 px-6 border-t border-border">

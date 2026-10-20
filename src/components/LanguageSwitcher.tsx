@@ -20,7 +20,7 @@ export function LanguageSwitcher() {
           onClick={() => setLang(l.code)}
           className={`px-2 py-1 text-xs font-mono rounded transition-colors ${
             lang === l.code
-              ? "bg-accent text-white"
+              ? "bg-accent-deep text-white"
               : "bg-border/50 hover:bg-border text-muted hover:text-foreground"
           }`}
           aria-label={`Cambiar idioma a ${l.label}`}
