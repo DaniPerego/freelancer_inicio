@@ -97,7 +97,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     aboutEdu1: "Técnico Superior en Desarrollo de Software (2018)",
     aboutEdu2: "Formación continua en IA, ciberseguridad y analítica",
     aboutBio:
-      "Soy Carlos, Técnico Superior en Desarrollo de Software con más de 10 años construyendo interfaces, sitios y sistemas web. Me especializo en Front-End e integración de Inteligencia Artificial en el flujo de trabajo real: ingeniería de prompts, pair programming en vivo con copilotos de código y orquestación de múltiples agentes autónomos. También administro redes informáticas y doy soporte técnico en el sector público.",
+      "Soy Daniel, Técnico Superior en Desarrollo de Software con más de 10 años construyendo interfaces, sitios y sistemas web. Me especializo en Front-End e integración de Inteligencia Artificial en el flujo de trabajo real: ingeniería de prompts, pair programming en vivo con copilotos de código y orquestación de múltiples agentes autónomos. También administro redes informáticas y doy soporte técnico en el sector público.",
     aboutExperience: "Experiencia",
     aboutExp1: "+10 años construyendo productos web",
     aboutExp2: "Desarrollo asistido por IA (agentes y prompts)",
@@ -208,7 +208,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     aboutEdu1: "Higher Technician in Software Development (2018)",
     aboutEdu2: "Continuous training in AI, cybersecurity and analytics",
     aboutBio:
-      "I'm Carlos, a Higher Technician in Software Development with 10+ years building web interfaces, sites and systems. I specialize in Front-End and Artificial Intelligence integration in real workflows: prompt engineering, live pair programming with code copilots and orchestration of multiple autonomous agents. I also manage IT networks and provide technical support in the public sector.",
+      "I'm Daniel, a Higher Technician in Software Development with 10+ years building web interfaces, sites and systems. I specialize in Front-End and Artificial Intelligence integration in real workflows: prompt engineering, live pair programming with code copilots and orchestration of multiple autonomous agents. I also manage IT networks and provide technical support in the public sector.",
     aboutExperience: "Experience",
     aboutExp1: "10+ years building web products",
     aboutExp2: "AI-assisted development (agents and prompts)",
@@ -319,7 +319,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     aboutEdu1: "Técnico Superior em Desenvolvimento de Software (2018)",
     aboutEdu2: "Formação contínua em IA, cibersegurança e análise de dados",
     aboutBio:
-      "Sou Carlos, Técnico Superior em Desenvolvimento de Software com mais de 10 anos construindo interfaces, sites e sistemas web. Especializo-me em Front-End e integração de Inteligência Artificial no fluxo de trabalho real: engenharia de prompts, pair programming ao vivo com copilotos de código e orquestação de múltiplos agentes autônomos. Também administro redes de informática e ofereço suporte técnico no setor público.",
+      "Sou Daniel, Técnico Superior em Desenvolvimento de Software com mais de 10 anos construindo interfaces, sites e sistemas web. Especializo-me em Front-End e integração de Inteligência Artificial no fluxo de trabalho real: engenharia de prompts, pair programming ao vivo com copilotos de código e orquestação de múltiplos agentes autônomos. Também administro redes de informática e ofereço suporte técnico no setor público.",
     aboutExperience: "Experiência",
     aboutExp1: "+10 anos construindo produtos web",
     aboutExp2: "Desenvolvimento assistido por IA (agentes e prompts)",
