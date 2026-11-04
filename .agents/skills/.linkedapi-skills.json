@@ -1,0 +1,11 @@
+{
+  "skills": {
+    "linkedin": {
+      "version": "1.0.17",
+      "scope": "project",
+      "agent": "codex",
+      "mode": "copy",
+      "installedAt": "2026-10-20T02:10:03.743Z"
+    }
+  }
+}

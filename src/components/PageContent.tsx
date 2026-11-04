@@ -398,7 +398,7 @@ export function PageContent() {
 
             {/* LinkedIn */}
             <a
-              href="https://www.linkedin.com/in/daniel-p%C3%A9rego-8ab9781b6/"
+              href="https://www.linkedin.com/in/danielperego/"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 hover:text-accent transition-colors"
