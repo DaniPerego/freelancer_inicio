@@ -80,6 +80,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     project9Desc: "Sistema integral de cobros para clubes e instituciones: socios, cuotas, pagos online con Stripe y Mercado Pago, comprobantes, recordatorios por WhatsApp y reportes financieros.",
     project10Name: "Libres PDF",
     project10Desc: "Editor de PDF online. Agregá texto, imágenes, formas y anotaciones; dividí, uní y rotá páginas sin instalar nada.",
+    project11Name: "DesarrolloWeb Academy",
+    project11Desc: "Plataforma de aprendizaje de programación para chicos y jóvenes: tracks por niveles, lecciones interactivas con sandbox de bloques y de código, tareas calificadas, gamificación y dashboards. Disponible en español, inglés y portugués.",
+    project12Name: "Control de Obra",
+    project12Desc: "App de control financiero de construcciones: materiales, mano de obra, adelantos, proveedores y reportes con tablero de resumen, modo oscuro y modo PWA instalable.",
 
     // Skills
     skillsLabel: "Stack",
@@ -191,6 +195,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     project9Desc: "Complete billing system for clubs and institutions: members, fees, online payments with Stripe and Mercado Pago, receipts, WhatsApp reminders and financial reports.",
     project10Name: "Libres PDF",
     project10Desc: "Online PDF editor. Add text, images, shapes and annotations; split, merge and rotate pages without installing anything.",
+    project11Name: "DesarrolloWeb Academy",
+    project11Desc: "Programming learning platform for kids and teens: level-based tracks, interactive lessons with a blocks and code sandbox, graded assignments, gamification and dashboards. Available in Spanish, English and Portuguese.",
+    project12Name: "Construction Cost Control",
+    project12Desc: "Construction budget app: materials, labor, advances, suppliers and reports with a summary dashboard, dark mode and installable PWA.",
 
     // Skills
     skillsLabel: "Stack",
@@ -302,6 +310,10 @@ export const translations: Record<Lang, Record<string, string>> = {
     project9Desc: "Sistema completo de cobranças para clubes e instituições: sócios, cotas, pagamentos online com Stripe e Mercado Pago, comprovantes, lembretes por WhatsApp e relatórios financeiros.",
     project10Name: "Libres PDF",
     project10Desc: "Editor de PDF online. Adicione texto, imagens, formas e anotações; divida, una e gire páginas sem instalar nada.",
+    project11Name: "DesarrolloWeb Academy",
+    project11Desc: "Plataforma de aprendizado de programação para crianças e jovens: trilhas por nível, aulas interativas com sandbox de blocos e de código, tarefas corrigidas, gamificação e painéis. Disponível em espanhol, inglês e português.",
+    project12Name: "Controle de Obra",
+    project12Desc: "App de controle financeiro de construções: materiais, mão de obra, adiantamentos, fornecedores e relatórios com painel de resumo, modo escuro e PWA instalável.",
 
     // Skills
     skillsLabel: "Stack",

@@ -33,7 +33,7 @@ export default function RootLayout({
   children,
 }: LayoutProps<"/">) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="es" className="dark" suppressHydrationWarning>
       <body className={`${inter.variable} min-h-full flex flex-col font-sans antialiased`}>
         <ServiceWorkerRegistrar />
         <ThemeProvider>

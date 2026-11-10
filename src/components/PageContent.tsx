@@ -19,6 +19,8 @@ const projectKeys = [
   { slug: "tvlibres", name: "project8Name", desc: "project8Desc", url: "https://tvlibres.vercel.app/", tags: ["PWA", "JavaScript", "Service Worker"] },
   { slug: "libres-cobros", name: "project9Name", desc: "project9Desc", url: "https://libres-cobros.vercel.app/", tags: ["Next.js", "Prisma", "PostgreSQL", "Stripe", "Mercado Pago"] },
   { slug: "libres-pdf", name: "project10Name", desc: "project10Desc", url: "https://libres-pdf.vercel.app/", tags: ["JavaScript", "pdf-lib", "Fabric.js"] },
+  { slug: "plataforma-ensenanza", name: "project11Name", desc: "project11Desc", url: "https://plataforma-ensenanza.vercel.app/", tags: ["Next.js", "Fastify", "TypeScript", "PostgreSQL"] },
+  { slug: "control-obra", name: "project12Name", desc: "project12Desc", url: "https://control-obra.vercel.app/", tags: ["HTML", "CSS", "JavaScript", "PWA"] },
 ];
 
 const serviceKeys = [

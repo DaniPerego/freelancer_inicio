@@ -13,10 +13,9 @@ const ThemeContext = createContext<{
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Always start in light so the first paint matches the server render.
-  // Reading localStorage or prefers-color-scheme here caused a white -> dark
-  // flash on every load.
-  const [theme, setTheme] = useState<Theme>("light");
+  // Dark is the default and matches the server-rendered <html className="dark">,
+  // so the first paint is already dark with no flash.
+  const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
