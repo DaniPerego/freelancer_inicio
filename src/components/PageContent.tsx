@@ -419,7 +419,7 @@ export function PageContent() {
 
             {/* Web */}
             <a
-              href="https://www.desarrolloweb-pdl.vercel.app"
+              href="https://www.desarrolloweb-pdl.dev"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 hover:text-accent transition-colors"
@@ -439,7 +439,7 @@ export function PageContent() {
                 <line x1="2" x2="22" y1="12" y2="12" />
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
               </svg>
-              www.desarrolloweb-pdl.vercel.app
+              www.desarrolloweb-pdl.dev
             </a>
           </div>
         </div>
